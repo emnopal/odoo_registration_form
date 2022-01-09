@@ -3,6 +3,9 @@ This is simple odoo module for Registration Form
 
 # How to run?
 
+## Run docker compose
+`$ docker-compose up -d`
+
 ## Start PostgreSQL
 `$ docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=odoo --name db postgres`
 
