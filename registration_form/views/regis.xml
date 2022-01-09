@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="regis_tree" model="ir.ui.view">
+        <field name="name">form.regist.tree</field>
+        <field name="model">form.regist</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="regis_form" model="ir.ui.view">
+        <field name="name">form.regist.form</field>
+        <field name="model">form.regist</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="first_name"/>
+                            <field name="last_name"/>
+                            <field name="age"/>
+                        </group>
+                        <group>
+                            <field name="gender"/>
+                            <field name="address"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="regis_action" model="ir.actions.act_window">
+        <field name="name">Users</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">form.regist</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create brand new users
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="regis_root"
+              name="Registration"
+              sequence="10"/>
+
+    <menuitem id="regis_form_root"
+              name="Users"
+              parent="regis_root"
+              sequence="10"/>
+
+    <menuitem id="regis_form"
+              name="Users"
+              parent="regis_form_root"
+              action="regis_action"
+              sequence="10"/>
+
+</odoo>
