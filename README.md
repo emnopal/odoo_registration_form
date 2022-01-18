@@ -7,9 +7,9 @@ This is simple odoo module for Registration Form
 1. Run DB <br>
 `$ docker-compose up -d postgres`
 2. Create Role<br>
-`$ docker exec -ti -u root registration_form_db_1 psql -U postgres`
-`CREATE ROLE odoo WITH CREATEDB LOGIN ENCRYPTED PASSWORD '1234';`
-`\q` to quit
+`$ docker exec -ti -u root registration_form_db_1 psql -U postgres`<br>
+`CREATE ROLE odoo WITH CREATEDB LOGIN ENCRYPTED PASSWORD '1234';`<br>
+`\q` to quit<br>
 3. Run Odoo<br>
 `$ docker-compose run --rm odoo`
 
