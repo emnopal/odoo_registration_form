@@ -1,35 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <record id="regis_tree" model="ir.ui.view">
+    <!-- To Upgrade XML or View no need to restart odoo server -->
+    <!-- Customize Tree View -->
+    <!-- Tree View is list view in Odoo -->
+    <record id="regis_from_tree" model="ir.ui.view">
+        <!--Name convention: {model_name}.tree-->
+        <!--Name convention: {model_name}.{model_category}-->
         <field name="name">form.regist.tree</field>
+        <!-- For model: find it on models module -->
         <field name="model">form.regist</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="first_name"/>
-                <field name="last_name"/>
+                <field name="fullname" string="Name"/>
                 <field name="age"/>
                 <field name="gender"/>
                 <field name="address"/>
+                <field name="bio"/>
+                <field name="create_date" string="Account Created"/>
             </tree>
         </field>
     </record>
 
-    <record id="regis_form" model="ir.ui.view">
+    <!-- Form -->
+    <record id="regis_form_form" model="ir.ui.view">
+        <!--Name convention: {model_name}.form-->
         <field name="name">form.regist.form</field>
         <field name="model">form.regist</field>
         <field name="arch" type="xml">
             <form>
+                <!--Sheet: to make border in form-->
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="fullname" readonly="1"/>
+                        </h1>
+                    </div>
+                    <!--Group: to make label visible-->
                     <group>
+                        <!--Group: to make grouping for each label-->
                         <group>
                             <field name="first_name"/>
                             <field name="last_name"/>
                             <field name="age"/>
+                            <field name="gender"/>
                         </group>
                         <group>
-                            <field name="gender"/>
                             <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="bio"/>
                         </group>
                     </group>
                 </sheet>
@@ -37,31 +56,121 @@
         </field>
     </record>
 
-    <record id="regis_action" model="ir.actions.act_window">
-        <field name="name">Users</field>
+    <!-- If you want to inherit view -->
+    <!--    <record id="{inherited id}" model="ir.ui.view">-->
+    <!--        <field name="name">{inherited names}</field>-->
+    <!--        <field name="model">{inherited models}</field>-->
+    <!--        <field name="inherit_id" ref="{search for "external id" on odoo module on view you want to inherit}"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--&lt;!&ndash;            <xpath expr="//field[@name='group_ids']" position="after">&ndash;&gt; in odoo >= 14 use xpath instead of field -->
+    <!--                <field name="subscription_department_ids" widget="many2many_tags"-->
+    <!--                    string="Auto Subscribe Departments"/>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!-- Search field in odoo >= 13 also known for ControlPanelView -->
+    <record id="regis_form_search" model="ir.ui.view">
+        <field name="name">form.regist.search</field>
+        <field name="model">form.regist</field>
+        <field name="arch" type="xml">
+            <search string="Users">
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="address"/>
+                <field name="bio"/>
+                <separator/>
+                <!--This is for group by filter-->
+                <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+<!--                <filter string="Child" name="child" domain="[('age', '<', '10')]"/>-->
+<!--                <filter string="Teenagers" name="teenagers" domain="[('age', '>=', '10'),('age', '<', '23')]"/>-->
+<!--                <filter string="Adult" name="adult" domain="[('age', '>=', '23'),('age', '<', '50')]"/>-->
+<!--                <filter string="Old" name="old" domain="[('age', '>', '50')]"/>-->
+                <group expand="1" string="Group By">
+                    <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
+                    <filter name="address" string="Address" context="{'group_by':'address'}"/>
+                    <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="regis_form_action" model="ir.actions.act_window">
+        <field name="name">Users Registration</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">form.regist</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Create brand new users
+                Create new users
             </p>
         </field>
     </record>
 
+    <!--    <record id="regis_action2" model="ir.actions.act_window">-->
+    <!--        <field name="name">Users 2 Registration</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">form.regist</field>-->
+    <!--        <field name="view_mode">tree,kanban,form</field>-->
+    <!--        <field name="help" type="html">-->
+    <!--            <p class="o_view_nocontent_smiling_face">-->
+    <!--                Create brand new users-->
+    <!--            </p>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    <record id="regis_action3" model="ir.actions.act_window">-->
+    <!--        <field name="name">Other Users Registration</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">form.regist</field>-->
+    <!--        <field name="view_mode">tree,kanban,form</field>-->
+    <!--        <field name="help" type="html">-->
+    <!--            <p class="o_view_nocontent_smiling_face">-->
+    <!--                Create brand new users-->
+    <!--            </p>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!-- This is main menu items -->
+    <!-- You can find it on upper left corner -->
+    <!-- Sequence is used to order menu items -->
+    <!-- Name is used to naming menu -->
+    <!-- ID is used to create db regarding to the view (Do not use same name as the module name, using prefix instead) -->
     <menuitem id="regis_root"
               name="Registration"
-              sequence="10"/>
+              sequence="1"/>
 
+    <!-- This is menu items that inherits from main menu items -->
     <menuitem id="regis_form_root"
               name="Users"
               parent="regis_root"
-              sequence="10"/>
+              sequence="1"/>
 
+    <!--    <menuitem id="regis_form_root2"-->
+    <!--              name="Other"-->
+    <!--              parent="regis_root"-->
+    <!--              sequence="2"/>-->
+
+    <!-- This is sub menu items that inherits from main menu item -->
+    <!-- We need to link the action here, because if there is no action, the menu will not be shown -->
     <menuitem id="regis_form"
               name="Users"
               parent="regis_form_root"
-              action="regis_action"
-              sequence="10"/>
+              action="regis_form_action"
+              sequence="1"/>
+
+    <!--    <menuitem id="regis_form2"-->
+    <!--              name="Other Users"-->
+    <!--              parent="regis_form_root"-->
+    <!--              action="regis_action2"-->
+    <!--              sequence="2"/>-->
+
+    <!--    <menuitem id="regis_form3"-->
+    <!--              name="Users Test"-->
+    <!--              parent="regis_form_root2"-->
+    <!--              action="regis_action3"-->
+    <!--              sequence="3"/>-->
 
 </odoo>
