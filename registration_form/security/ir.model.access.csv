@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_form_regist,access.form.regist,model_form_regist,,1,1,1,1
+access_regis_user,access.regis.user,model_regis_user,,1,1,1,1

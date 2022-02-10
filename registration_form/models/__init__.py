@@ -1,1 +1,2 @@
-from . import regis
+from . import RegisUser
+from . import SaleOrder

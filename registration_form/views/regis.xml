@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
     <!-- To Upgrade XML or View no need to restart odoo server -->
     <!-- Customize Tree View -->
     <!-- Tree View is list view in Odoo -->
-    <record id="view_regis_form_tree" model="ir.ui.view">
+    <record id="view_regis_user_tree" model="ir.ui.view">
         <!--Name convention: {model_name}.tree-->
         <!--Name convention: {model_name}.{model_category}-->
-        <field name="name">form.regist.tree</field>
+        <field name="name">regis.user.tree</field>
         <!-- For model: find it on models module -->
-        <field name="model">form.regist</field>
+        <field name="model">regis.user</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="fullname" string="Name"/>
@@ -16,15 +17,16 @@
                 <field name="gender"/>
                 <field name="address"/>
                 <field name="bio"/>
+                <field name="state" string="Status"/>
                 <field name="create_date" string="Account Created"/>
             </tree>
         </field>
     </record>
 
     <!-- Kanban View -->
-    <record id="view_regis_form_kanban" model="ir.ui.view">
-        <field name="name">form.regist.kanban</field>
-        <field name="model">form.regist</field>
+    <record id="view_regis_user_kanban" model="ir.ui.view">
+        <field name="name">regis.user.kanban</field>
+        <field name="model">regis.user</field>
         <field name="arch" type="xml">
             <kanban>
                 <field name="id"/> <!--ID is needed when create kanban view-->
@@ -33,6 +35,7 @@
                 <field name="gender"/>
                 <field name="address"/>
                 <field name="bio"/>
+                <field name="state" string="Status"/>
                 <field name="create_date" string="Account Created"/>
                 <!-- Need to add templates tag for kanban view, otherwise will be error -->
                 <templates>
@@ -52,6 +55,10 @@
                                         Gender:
                                         <field name="gender"/>
                                     </li>
+                                    <li>
+                                        Status:
+                                        <field name="state"/>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -62,12 +69,37 @@
     </record>
 
     <!-- Form -->
-    <record id="view_regis_form_form" model="ir.ui.view">
+    <record id="view_regis_user_form" model="ir.ui.view">
         <!--Name convention: {model_name}.form-->
-        <field name="name">form.regist.form</field>
-        <field name="model">form.regist</field>
+        <field name="name">regis.user.form</field>
+        <field name="model">regis.user</field>
         <field name="arch" type="xml">
+            <!--Add status bar from here-->
             <form>
+                <!--Add status bar after header here-->
+                <header>
+                    <!--Adding button to statusbar-->
+                    <!--This is dynamic button on statusbar that corresponding
+                    to action that will change state in statusbar-->
+                    <!--If you specify type = object, odoo will search it on the corresponding model that you specify
+                    For example, odoo will search name = action_confirm on regis.user model-->
+                    <!--Specify state if you want to show only the button on another state scenario-->
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
+                            id="button_confirm" states="done,draft,cancel"/>
+                    <button name="action_done" type="object" string="Mark as Done" class="btn-success"
+                            id="button_done" states="draft,cancel"/>
+                    <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
+                            id="button_draft" states="cancel,done,confirm"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            id="button_cancel" states="done,confirm,draft"/>
+                    <!--Need to specify statusbar as widget here, and if you want to create statusbar clickable,
+                    you need to add options menu  and add clickable as true or 1
+                    and if you want to show only some of statusbar state just add statusbar_visible-->
+                    <!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
+                    <!--                           statusbar_visible="draft,confirm,done"/>-->
+                    <!--If status bar not clickable (using button to communicate)-->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                </header>
                 <!--Sheet: to make border in form-->
                 <sheet>
                     <div class="oe_title">
@@ -92,6 +124,15 @@
                         </group>
                     </group>
                 </sheet>
+                <!--If you want to add chatter form, please search inside odoo debug mode for module that has chatter form-->
+                <!--For example, I'm gonna adding it from sale.order view, and search for oe_chatter-->
+                <!--Chatter Form-->
+                <!--Chatter form located after sheet in form view-->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/> <!--This is follower section on chatter-->
+                    <field name="activity_ids"/> <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
+                    <field name="message_ids"/> <!--This is message section on chatter-->
+                </div>
             </form>
         </field>
     </record>
@@ -110,9 +151,9 @@
     <!--    </record>-->
 
     <!-- Search field in odoo >= 13 also known for ControlPanelView -->
-    <record id="view_regis_form_search" model="ir.ui.view">
-        <field name="name">form.regist.search</field>
-        <field name="model">form.regist</field>
+    <record id="view_regis_user_search" model="ir.ui.view">
+        <field name="name">regis.user.search</field>
+        <field name="model">regis.user</field>
         <field name="arch" type="xml">
             <search string="Users">
                 <field name="first_name"/>
@@ -123,6 +164,11 @@
                 <!--This is for group by filter-->
                 <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
                 <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+                <!--Added group by state (in statusbar)-->
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]"/>
                 <!--                <filter string="Child" name="child" domain="[('age', '<', '10')]"/>-->
                 <!--                <filter string="Teenagers" name="teenagers" domain="[('age', '>=', '10'),('age', '<', '23')]"/>-->
                 <!--                <filter string="Adult" name="adult" domain="[('age', '>=', '23'),('age', '<', '50')]"/>-->
@@ -131,16 +177,18 @@
                     <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
                     <filter name="address" string="Address" context="{'group_by':'address'}"/>
                     <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                    <!--Added group by state (in statusbar)-->
+                    <filter name="state" string="Status" context="{'group_by':'state'}"/>
                 </group>
             </search>
         </field>
     </record>
 
     <!-- Action -->
-    <record id="regis_form_action" model="ir.actions.act_window">
+    <record id="regis_user_action" model="ir.actions.act_window">
         <field name="name">Users Registration</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">form.regist</field>
+        <field name="res_model">regis.user</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -156,7 +204,7 @@
     <!--        <field name="view_mode">tree,kanban,form</field>-->
     <!--        <field name="help" type="html">-->
     <!--            <p class="o_view_nocontent_smiling_face">-->
-    <!--                Create brand new users-->
+    <!--                Create brand-new users-->
     <!--            </p>-->
     <!--        </field>-->
     <!--    </record>-->
@@ -168,7 +216,7 @@
     <!--        <field name="view_mode">tree,kanban,form</field>-->
     <!--        <field name="help" type="html">-->
     <!--            <p class="o_view_nocontent_smiling_face">-->
-    <!--                Create brand new users-->
+    <!--                Create brand-new users-->
     <!--            </p>-->
     <!--        </field>-->
     <!--    </record>-->
@@ -177,13 +225,13 @@
     <!-- You can find it on upper left corner -->
     <!-- Sequence is used to order menu items -->
     <!-- Name is used to naming menu -->
-    <!-- ID is used to create db regarding to the view (Do not use same name as the module name, using prefix instead) -->
+    <!-- ID is used to create db regarding the view (Do not use same name as the module name, using prefix instead) -->
     <menuitem id="regis_root"
               name="Registration"
               sequence="1"/>
 
     <!-- This is menu items that inherits from main menu items -->
-    <menuitem id="regis_form_root"
+    <menuitem id="regis_user_root"
               name="Users"
               parent="regis_root"
               sequence="1"/>
@@ -197,8 +245,8 @@
     <!-- We need to link the action here, because if there is no action, the menu will not be shown -->
     <menuitem id="regis_form"
               name="Users"
-              parent="regis_form_root"
-              action="regis_form_action"
+              parent="regis_user_root"
+              action="regis_user_action"
               sequence="1"/>
 
     <!--    <menuitem id="regis_form2"-->

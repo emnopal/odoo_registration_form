@@ -23,7 +23,10 @@
     'license': '',
 
     # any module necessary for this one to work correctly
-    'depends': [],
+    'depends': [
+        'sale',  # added sale here to make it work
+        'mail',  # because mail is required since we use the mail.thread for Chatter view
+    ],
     # By default, all modules will inherit from base module of odoo
 
     # always loaded
@@ -33,7 +36,8 @@
         # if group_id:id is empty, then access will be grant globally
         # 1: True, 0: False
         'security/ir.model.access.csv',  # this is required for the registration form to work
-        'views/regis.xml'
+        'views/regis.xml',
+        'views/sale.xml',  # new view for sale from inherited view
     ],
 
     # only loaded in demonstration mode
