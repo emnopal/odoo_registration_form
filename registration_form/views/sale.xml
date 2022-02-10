@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Create new view form in inherited views-->
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!--Starting of odoo 14 above, use xpath instead of field in inherited view-->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="sale_description" string="Sale Description"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Create new view tree in inherited views-->
+    <record id="view_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <!--Starting of odoo 14 above, use xpath instead of field in inherited view-->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_description" string="Sale Description"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Assign (new) action to sale from action above-->
+    <!--    <menuitem id="menu_sale_appointment"-->
+    <!--              name="Appointments"-->
+    <!--              parent="sale.sale_order_menu"-->
+    <!--              sequence="2"-->
+    <!--              action="action_registration_appointment"/>-->
+
+</odoo>
