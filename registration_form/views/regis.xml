@@ -12,11 +12,13 @@
         <field name="model">regis.user</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
                 <field name="fullname" string="Name"/>
                 <field name="age"/>
                 <field name="gender"/>
                 <field name="address"/>
                 <field name="bio"/>
+                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
                 <field name="state" string="Status"/>
                 <field name="create_date" string="Account Created"/>
             </tree>
@@ -35,6 +37,8 @@
                 <field name="gender"/>
                 <field name="address"/>
                 <field name="bio"/>
+                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
+                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
                 <field name="state" string="Status"/>
                 <field name="create_date" string="Account Created"/>
                 <!-- Need to add templates tag for kanban view, otherwise will be error -->
@@ -43,6 +47,12 @@
                         <div t-attf-class="oe_kanban_global_click">
                             <div class="oe_kanban_details">
                                 <ul>
+                                    <li>
+                                        <h1>
+                                            UID:
+                                            <field name="reference"/> <!--Reference here is sequence of user create-->
+                                        </h1>
+                                    </li>
                                     <li>
                                         Name:
                                         <field name="fullname"/>
@@ -58,6 +68,10 @@
                                     <li>
                                         Status:
                                         <field name="state"/>
+                                    </li>
+                                    <li> <!--This is many2one field (example)-->
+                                        Partner:
+                                        <field name="partner_id"/>
                                     </li>
                                 </ul>
                             </div>
@@ -85,13 +99,13 @@
                     For example, odoo will search name = action_confirm on regis.user model-->
                     <!--Specify state if you want to show only the button on another state scenario-->
                     <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
-                            id="button_confirm" states="done,draft,cancel"/>
+                            id="button_confirm" states="draft,done,cancel"/>
                     <button name="action_done" type="object" string="Mark as Done" class="btn-success"
-                            id="button_done" states="draft,cancel"/>
+                            id="button_done" states="draft,confirm,cancel"/>
                     <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
-                            id="button_draft" states="cancel,done,confirm"/>
+                            id="button_draft" states="confirm,done,cancel"/>
                     <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
-                            id="button_cancel" states="done,confirm,draft"/>
+                            id="button_cancel" states="confirm,done,draft"/>
                     <!--Need to specify statusbar as widget here, and if you want to create statusbar clickable,
                     you need to add options menu  and add clickable as true or 1
                     and if you want to show only some of statusbar state just add statusbar_visible-->
@@ -104,7 +118,7 @@
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="fullname"/>
+                            <field name="fullname_seq"/>
                         </h1>
                     </div>
                     <!--Group: to make label visible-->
@@ -121,6 +135,10 @@
                         </group>
                         <group>
                             <field name="bio"/>
+                        </group>
+                        <!--This is many2one field (example)-->
+                        <group>
+                            <field name="partner_id" string="Partner"/>
                         </group>
                     </group>
                 </sheet>
@@ -158,12 +176,14 @@
             <search string="Users">
                 <field name="first_name"/>
                 <field name="last_name"/>
+                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
                 <field name="address"/>
                 <field name="bio"/>
-                <separator/>
+                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
                 <!--This is for group by filter-->
                 <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
                 <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+                <separator/>
                 <!--Added group by state (in statusbar)-->
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
@@ -184,17 +204,58 @@
         </field>
     </record>
 
-    <!-- Action -->
+    <!-- User Action -->
     <record id="regis_user_action" model="ir.actions.act_window">
+
         <field name="name">Users Registration</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">regis.user</field>
+
+        <!-- Default view mode is tree -->
         <field name="view_mode">tree,kanban,form</field>
+
+        <!-- Set Default groupby in view, for example gender, so search_default will be {search_default_gender:1}
+        or in general form: {search_default_{groupby field}:1}-->
+        <!--        <field name="context">{'search_default_gender':1}</field>-->
+        <!--This is example of how to add multiple groupby-->
+        <!--Just add another search_default field in context to add more than 2-->
+        <!--        <field name="context">{'search_default_gender':1,'search_default_state':1}</field>-->
+
+        <!-- Set Default filter in view, for example I will filter "done", so search_default will
+        be {search_default_done:1}
+        or in general form: {search_default_{filter field}:1}-->
+        <!--        <field name="context">{'search_default_done':1}</field>-->
+        <!--This is example of how to add multiple filter-->
+        <!--Just add another search_default field in context to add more than 2-->
+        <field name="context">{'search_default_done':1,'search_default_confirm':1}</field>
+
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create new users
             </p>
         </field>
+
+    </record>
+
+    <!-- This, how to add other action on odoo XML -->
+    <!-- Partner Action -->
+    <record id="regis_user_partner_action" model="ir.actions.act_window">
+
+        <field name="name">Users Partners</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+
+        <!--To make kanban default view mode, rearrange it to first-->
+        <!--This also applied for another view mode-->
+        <!--from this (tree as default view): <field name="view_mode">tree,kanban,form</field>, to this: -->
+        <field name="view_mode">kanban,tree,form</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new users
+            </p>
+        </field>
+
     </record>
 
     <!--    <record id="regis_action2" model="ir.actions.act_window">-->
@@ -243,11 +304,20 @@
 
     <!-- This is sub menu items that inherits from main menu item -->
     <!-- We need to link the action here, because if there is no action, the menu will not be shown -->
+    <!-- User Menu -->
     <menuitem id="regis_form"
               name="Users"
               parent="regis_user_root"
               action="regis_user_action"
               sequence="1"/>
+
+    <!-- User Partner Menu -->
+    <!-- This, how to assign other action in odoo XML in existing views -->
+    <menuitem id="regis_partner"
+              name="Partner"
+              parent="regis_user_root"
+              action="regis_user_partner_action"
+              sequence="2"/>
 
     <!--    <menuitem id="regis_form2"-->
     <!--              name="Other Users"-->

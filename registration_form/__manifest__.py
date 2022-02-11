@@ -32,12 +32,18 @@
     # always loaded
     'data': [
         # this need following code convention,
-        # first is the security rule
+        # first must be security file
         # if group_id:id is empty, then access will be grant globally
         # 1: True, 0: False
         'security/ir.model.access.csv',  # this is required for the registration form to work
+        # second must be data file
+        'data/sequence.xml',  # this is sequence file, for sequencing the registration form
+        # third must be wizard file
+        # fourth must be view file
         'views/regis.xml',
         'views/sale.xml',  # new view for sale from inherited view
+        # fifth must be report file
+
     ],
 
     # only loaded in demonstration mode
