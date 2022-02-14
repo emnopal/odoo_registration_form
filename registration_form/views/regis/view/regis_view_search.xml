@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Search field in odoo >= 13 also known for ControlPanelView -->
+    <record id="view_regis_user_search" model="ir.ui.view">
+        <field name="name">regis.user.search</field>
+        <field name="model">regis.user</field>
+        <field name="arch" type="xml">
+            <search string="Users">
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
+                <field name="address"/>
+                <field name="bio"/>
+                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
+                <!--This is for group by filter-->
+                <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+                <separator/>
+                <!--Added group by state (in statusbar)-->
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]"/>
+                <!--                <filter string="Child" name="child" domain="[('age', '<', '10')]"/>-->
+                <!--                <filter string="Teenagers" name="teenagers" domain="[('age', '>=', '10'),('age', '<', '23')]"/>-->
+                <!--                <filter string="Adult" name="adult" domain="[('age', '>=', '23'),('age', '<', '50')]"/>-->
+                <!--                <filter string="Old" name="old" domain="[('age', '>', '50')]"/>-->
+                <group expand="1" string="Group By">
+                    <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
+                    <filter name="address" string="Address" context="{'group_by':'address'}"/>
+                    <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                    <!--Added group by state (in statusbar)-->
+                    <filter name="state" string="Status" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

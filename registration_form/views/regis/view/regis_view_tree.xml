@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customize Tree View -->
+    <!-- Tree View is list view in Odoo -->
+    <record id="view_regis_user_tree" model="ir.ui.view">
+        <!--Name convention: {model_name}.tree-->
+        <!--Name convention: {model_name}.{model_category}-->
+        <field name="name">regis.user.tree</field>
+        <!-- For model: find it on models module -->
+        <field name="model">regis.user</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
+                <field name="fullname" string="Name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="address"/>
+                <field name="bio"/>
+                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
+                <field name="state" string="Status"/>
+                <field name="create_date" string="Account Created"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

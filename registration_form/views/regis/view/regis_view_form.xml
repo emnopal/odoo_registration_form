@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form -->
+    <record id="view_regis_user_form" model="ir.ui.view">
+        <!--Name convention: {model_name}.form-->
+        <field name="name">regis.user.form</field>
+        <field name="model">regis.user</field>
+        <field name="arch" type="xml">
+            <!--Add status bar from here-->
+            <form>
+                <!--Add status bar after header here-->
+                <header>
+                    <!--Adding button to statusbar-->
+                    <!--This is dynamic button on statusbar that corresponding
+                    to action that will change state in statusbar-->
+                    <!--If you specify type = object, odoo will search it on the corresponding model that you specify
+                    For example, odoo will search name = action_confirm on regis.user model-->
+                    <!--Specify state if you want to show only the button on another state scenario-->
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
+                            id="button_confirm" states="draft,done,cancel"/>
+                    <button name="action_done" type="object" string="Mark as Done" class="btn-success"
+                            id="button_done" states="draft,confirm,cancel"/>
+                    <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
+                            id="button_draft" states="confirm,done,cancel"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            id="button_cancel" states="confirm,done,draft"/>
+                    <!--Need to specify statusbar as widget here, and if you want to create statusbar clickable,
+                    you need to add options menu  and add clickable as true or 1
+                    and if you want to show only some of statusbar state just add statusbar_visible-->
+                    <!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
+                    <!--                           statusbar_visible="draft,confirm,done"/>-->
+                    <!--If status bar not clickable (using button to communicate)-->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                </header>
+                <!--Sheet: to make border in form-->
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="fullname_seq"/>
+                        </h1>
+                    </div>
+                    <!--Group: to make label visible-->
+                    <group>
+                        <!--Group: to make grouping for each label-->
+                        <group>
+                            <field name="first_name"/>
+                            <field name="last_name"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="bio"/>
+                        </group>
+                        <!--This is many2one field (example)-->
+                        <group>
+                            <field name="partner_id" string="Partner"/>
+                        </group>
+                    </group>
+                </sheet>
+                <!--If you want to add chatter form, please search inside odoo debug mode for module that has chatter form-->
+                <!--For example, I'm gonna adding it from sale.order view, and search for oe_chatter-->
+                <!--Chatter Form-->
+                <!--Chatter form located after sheet in form view-->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/> <!--This is follower section on chatter-->
+                    <field name="activity_ids"/> <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
+                    <field name="message_ids"/> <!--This is message section on chatter-->
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

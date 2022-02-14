@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- To Upgrade XML or View no need to restart odoo server -->
+    <!-- User Action -->
+    <record id="regis_user_action" model="ir.actions.act_window">
+
+        <field name="name">Users Registration</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">regis.user</field>
+
+        <!-- Default view mode is tree -->
+        <field name="view_mode">tree,kanban,form</field>
+
+        <!-- Set Default groupby in view, for example gender, so search_default will be {search_default_gender:1}
+        or in general form: {search_default_{groupby field}:1}-->
+        <!--        <field name="context">{'search_default_gender':1}</field>-->
+        <!--This is example of how to add multiple groupby-->
+        <!--Just add another search_default field in context to add more than 2-->
+        <!--        <field name="context">{'search_default_gender':1,'search_default_state':1}</field>-->
+
+        <!-- Set Default filter in view, for example I will filter "done", so search_default will
+        be {search_default_done:1}
+        or in general form: {search_default_{filter field}:1}-->
+        <!--        <field name="context">{'search_default_done':1}</field>-->
+        <!--This is example of how to add multiple filter-->
+        <!--Just add another search_default field in context to add more than 2-->
+        <field name="context">{'search_default_done':1,'search_default_confirm':1}</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new users
+            </p>
+        </field>
+
+    </record>
+
+    <!--    <record id="regis_action2" model="ir.actions.act_window">-->
+    <!--        <field name="name">Users 2 Registration</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">form.regist</field>-->
+    <!--        <field name="view_mode">tree,kanban,form</field>-->
+    <!--        <field name="help" type="html">-->
+    <!--            <p class="o_view_nocontent_smiling_face">-->
+    <!--                Create brand-new users-->
+    <!--            </p>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    <record id="regis_action3" model="ir.actions.act_window">-->
+    <!--        <field name="name">Other Users Registration</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">form.regist</field>-->
+    <!--        <field name="view_mode">tree,kanban,form</field>-->
+    <!--        <field name="help" type="html">-->
+    <!--            <p class="o_view_nocontent_smiling_face">-->
+    <!--                Create brand-new users-->
+    <!--            </p>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!-- This is main menu items -->
+    <!-- You can find it on upper left corner -->
+    <!-- Sequence is used to order menu items -->
+    <!-- Name is used to naming menu -->
+    <!-- ID is used to create db regarding the view (Do not use same name as the module name, using prefix instead) -->
+    <!--This is title menu for registration-->
+    <menuitem id="regis_root"
+              name="Registration"
+              sequence="1"/>
+
+    <!-- This is menu items that inherits from main menu items -->
+    <!--This is menu in registration name Users-->
+    <menuitem id="regis_user_root"
+              name="Users"
+              parent="regis_root"
+              sequence="1"/>
+
+    <!--    <menuitem id="regis_form_root2"-->
+    <!--              name="Other"-->
+    <!--              parent="regis_root"-->
+    <!--              sequence="2"/>-->
+
+    <!-- This is sub menu items that inherits from main menu item -->
+    <!-- We need to link the action here, because if there is no action, the menu will not be shown -->
+    <!-- User Menu -->
+    <!--This is sub menu in Users in registration module named Users-->
+    <menuitem id="regis_form"
+              name="Users"
+              parent="regis_user_root"
+              action="regis_user_action"
+              sequence="1"/>
+
+    <!--    <menuitem id="regis_form2"-->
+    <!--              name="Other Users"-->
+    <!--              parent="regis_form_root"-->
+    <!--              action="regis_action2"-->
+    <!--              sequence="2"/>-->
+
+    <!--    <menuitem id="regis_form3"-->
+    <!--              name="Users Test"-->
+    <!--              parent="regis_form_root2"-->
+    <!--              action="regis_action3"-->
+    <!--              sequence="3"/>-->
+
+</odoo>

@@ -40,10 +40,14 @@
         'data/sequence.xml',  # this is sequence file, for sequencing the registration form
         # third must be wizard file
         # fourth must be view file
-        'views/regis.xml',
-        'views/sale.xml',  # new view for sale from inherited view
+        'views/regis/action/regis_view_action.xml',
+        'views/regis/action/regis_partner_view_action.xml',
+        'views/regis/view/regis_view_form.xml',
+        'views/regis/view/regis_view_kanban.xml',
+        'views/regis/view/regis_view_search.xml',
+        'views/regis/view/regis_view_tree.xml',
+        'views/sale/inherit_sale.xml',  # new view for sale from inherited view
         # fifth must be report file
-
     ],
 
     # only loaded in demonstration mode

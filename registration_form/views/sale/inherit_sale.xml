@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- If you want to inherit view -->
+    <!--    <record id="{inherited id}" model="ir.ui.view">-->
+    <!--        <field name="name">{inherited names}</field>-->
+    <!--        <field name="model">{inherited models}</field>-->
+    <!--        <field name="inherit_id" ref="{search for "external id" on odoo module on view you want to inherit}"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--&lt;!&ndash;            <xpath expr="//field[@name='group_ids']" position="after">&ndash;&gt; in odoo >= 14 use xpath instead of field -->
+    <!--                <field name="subscription_department_ids" widget="many2many_tags"-->
+    <!--                    string="Auto Subscribe Departments"/>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
     <!--Create new view form in inherited views-->
     <record id="view_order_form_inherit" model="ir.ui.view">
         <field name="name">sale.order.inherited</field>
