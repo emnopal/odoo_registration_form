@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_schedule_user_tree" model="ir.ui.view">
+        <field name="name">schedule.user.tree</field>
+        <field name="model">schedule.user</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="schedule_reference" string="Schedule ID"/>
+                <field name="user_id" string="User"/>
+                <field name="schedule_name" string="Title"/>
+                <field name="date_schedule" string="Date Schedule"/>
+                <field name="time_schedule" string="Time Schedule"/>
+                <field name="note" string="Note"/>
+                <field name="state" string="Status"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

@@ -25,7 +25,7 @@
         <!--        <field name="context">{'search_default_done':1}</field>-->
         <!--This is example of how to add multiple filter-->
         <!--Just add another search_default field in context to add more than 2-->
-        <field name="context">{'search_default_done':1,'search_default_confirm':1}</field>
+        <field name="context">{'search_default_done':1,'search_default_confirm':1,'default_age':24}</field>
 
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -76,17 +76,17 @@
               parent="regis_root"
               sequence="1"/>
 
-    <!--    <menuitem id="regis_form_root2"-->
-    <!--              name="Other"-->
-    <!--              parent="regis_root"-->
-    <!--              sequence="2"/>-->
+    <menuitem id="regis_status"
+              name="Status"
+              parent="regis_root"
+              sequence="2"/>
 
     <!-- This is sub menu items that inherits from main menu item -->
     <!-- We need to link the action here, because if there is no action, the menu will not be shown -->
     <!-- User Menu -->
     <!--This is sub menu in Users in registration module named Users-->
     <menuitem id="regis_form"
-              name="Users"
+              name="All Users"
               parent="regis_user_root"
               action="regis_user_action"
               sequence="1"/>

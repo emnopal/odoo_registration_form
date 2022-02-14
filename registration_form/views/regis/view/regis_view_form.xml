@@ -16,14 +16,19 @@
                     <!--If you specify type = object, odoo will search it on the corresponding model that you specify
                     For example, odoo will search name = action_confirm on regis.user model-->
                     <!--Specify state if you want to show only the button on another state scenario-->
+                    <!--If you want to add confirmation button, add confirm parameter to button-->
                     <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
-                            id="button_confirm" states="draft,done,cancel"/>
+                            id="button_confirm" states="draft,done,cancel"
+                            confirm="Are you sure to set it to confirm?"/>
                     <button name="action_done" type="object" string="Mark as Done" class="btn-success"
-                            id="button_done" states="draft,confirm,cancel"/>
+                            id="button_done" states="draft,confirm,cancel"
+                            confirm="Are you sure to set it to done?"/>
                     <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
-                            id="button_draft" states="confirm,done,cancel"/>
+                            id="button_draft" states="confirm,done,cancel"
+                            confirm="Are you sure to set it to draft?"/>
                     <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
-                            id="button_cancel" states="confirm,done,draft"/>
+                            id="button_cancel" states="confirm,done,draft"
+                            confirm="Are you sure to set it to cancel?"/>
                     <!--Need to specify statusbar as widget here, and if you want to create statusbar clickable,
                     you need to add options menu  and add clickable as true or 1
                     and if you want to show only some of statusbar state just add statusbar_visible-->
@@ -46,7 +51,9 @@
                             <field name="first_name"/>
                             <field name="last_name"/>
                             <field name="age"/>
-                            <field name="gender"/>
+                            <!--How to hide field based on condition/context on menu,
+                            so if there is hide_gender it will invisible-->
+                            <field name="gender" invisible="context.get('hide_gender')"/>
                         </group>
                         <group>
                             <field name="address"/>

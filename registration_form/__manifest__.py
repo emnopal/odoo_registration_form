@@ -37,16 +37,32 @@
         # 1: True, 0: False
         'security/ir.model.access.csv',  # this is required for the registration form to work
         # second must be data file
-        'data/sequence.xml',  # this is sequence file, for sequencing the registration form
+        'data/regis_sequence.xml',  # this is sequence file, for sequencing the registration form
+        'data/schedule_sequence.xml',  # this is sequence file, for sequencing the schedule form
         # third must be wizard file
         # fourth must be view file
         'views/regis/action/regis_view_action.xml',
         'views/regis/action/regis_partner_view_action.xml',
+        # Domain View
+        'views/regis/action/regis_kids_view_action.xml',
+        'views/regis/action/regis_male_view_action.xml',
+        'views/regis/action/regis_female_view_action.xml',
+        'views/regis/action/regis_draft_view_action.xml',
+        'views/regis/action/regis_done_view_action.xml',
+        'views/regis/action/regis_cancel_view_action.xml',
+        'views/regis/action/regis_confirm_view_action.xml',
         'views/regis/view/regis_view_form.xml',
         'views/regis/view/regis_view_kanban.xml',
         'views/regis/view/regis_view_search.xml',
         'views/regis/view/regis_view_tree.xml',
+        # Sale inherited view
         'views/sale/inherit_sale.xml',  # new view for sale from inherited view
+        # Schedule View
+        'views/schedule/action/schedule_view_action.xml',
+        'views/schedule/view/schedule_view_form.xml',
+        'views/schedule/view/schedule_view_kanban.xml',
+        'views/schedule/view/schedule_view_search.xml',
+        'views/schedule/view/schedule_view_tree.xml',
         # fifth must be report file
     ],
 

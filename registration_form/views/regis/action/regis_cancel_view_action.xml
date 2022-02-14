@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- This, how to add other action on odoo XML -->
+    <!-- Cancel Action -->
+    <record id="regis_user_cancel_action" model="ir.actions.act_window">
+
+        <field name="name">Cancel Users</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">regis.user</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <!--Overriding default value when create new field using context-->
+        <field name="context">{}</field>
+        <field name="domain">[('state','=','cancel')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new users
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Cancel User Menu -->
+    <!-- This, how to assign other action in odoo XML in existing views -->
+    <!--This is sub menu in Users in registration module named Kids-->
+    <menuitem id="regis_cancel"
+              name="Cancel"
+              parent="regis_status"
+              action="regis_user_cancel_action"
+              sequence="4"/>
+
+</odoo>

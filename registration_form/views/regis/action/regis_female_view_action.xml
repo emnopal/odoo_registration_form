@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- This, how to add other action on odoo XML -->
+    <!-- Female Action -->
+    <record id="regis_user_female_action" model="ir.actions.act_window">
+
+        <field name="name">Female Users</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">regis.user</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <!--Overriding default value when create new field using context-->
+        <field name="context">{'default_age': '24', 'default_gender':'female', 'hide_gender': 1}</field>
+        <!--Domain: Filter a records based on some condition-->
+        <!--if there is multiple domain [(first_domain), (second_domain)]-->
+        <!--if there is multiple domain with or operator ['|', (first_domain), (second_domain)]-->
+        <!--if there is multiple domain with and operator ['&', (first_domain), (second_domain)]-->
+        <field name="domain">[('gender','=','female')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new users
+            </p>
+        </field>
+
+    </record>
+
+    <!-- Female User Menu -->
+    <!-- This, how to assign other action in odoo XML in existing views -->
+    <!--This is sub menu in Users in registration module named Kids-->
+    <menuitem id="regis_female"
+              name="Female"
+              parent="regis_user_root"
+              action="regis_user_female_action"
+              sequence="3"/>
+
+</odoo>

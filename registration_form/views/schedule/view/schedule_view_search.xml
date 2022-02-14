@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_schedule_user_search" model="ir.ui.view">
+        <field name="name">schedule.user.search</field>
+        <field name="model">schedule.user</field>
+        <field name="arch" type="xml">
+            <search string="Schedule">
+                <field name="schedule_name" string="Title"/>
+                <field name="user_id" string="User"/>
+                <field name="date_schedule" string="Date Schedule"/>
+                <field name="time_schedule" string="Time Schedule"/>
+                <field name="note"/>
+                <field name="schedule_reference" string="Schedule ID"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]"/>
+                <group expand="1" string="Group By">
+                    <filter name="user_id" string="User" context="{'group_by':'user_id'}"/>
+                    <filter name="state" string="Status" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

@@ -80,6 +80,7 @@ class RegisUser(models.Model):
 
     # This is example how to create new field (fullname) and sequence it
     # based from existing field (first, last)
+    # This is computed field
     @api.depends('first_name', 'last_name', 'reference')
     def _compute_fields_combination_seq(self):
         for com in self:
@@ -92,6 +93,7 @@ class RegisUser(models.Model):
 
     # This is example how to create new field (fullname)
     # based from existing field (first, last)
+    # This is computed field
     @api.depends('first_name', 'last_name')
     def _compute_fields_combination(self):
         for com in self:
@@ -104,8 +106,11 @@ class RegisUser(models.Model):
 
     # This is example how to override field (without create method)
     # by changing first_name to title case automatically
+    # this is also name onchange method, that means this function will execute
+    # when field is changed
+    # naming convention: onchange_{field_name}
     @api.onchange('first_name')
-    def set_first_name_caps(self):
+    def onchange_first_name(self):
         if self.first_name:
             val = str(self.first_name)
             self.first_name = val.title()
@@ -114,8 +119,11 @@ class RegisUser(models.Model):
 
     # This is example how to override field (without create method)
     # by changing last_name to title case automatically
+    # this is also name onchange method, that means this function will execute
+    # when field is changed
+    # naming convention: onchange_{field_name}
     @api.onchange('last_name')
-    def set_last_name_caps(self):
+    def onchange_last_name(self):
         if self.last_name:
             val = str(self.last_name)
             self.last_name = val.title()

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1"> <!--To make the sequence not changing if updating the module-->
+
+        <record id="seq_schedule_user" model="ir.sequence">
+            <field name="name">Schedule Sequence</field> <!--Name of sequence-->
+            <field name="code">schedule.user</field> <!--Name of model that you want to sequence-->
+            <field name="prefix">SCH</field> <!--Prefix of sequence-->
+            <field name="padding">7</field> <!--Padding of sequence-->
+            <field name="number_increment">1</field> <!--Number increment of sequence-->
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

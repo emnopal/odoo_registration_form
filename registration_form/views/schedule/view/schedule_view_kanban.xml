@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_schedule_user_kanban" model="ir.ui.view">
+        <field name="name">schedule.user.kanban</field>
+        <field name="model">schedule.user</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="schedule_name" string="Name"/>
+                <field name="note"/>
+                <field name="schedule_reference" string="Schedule ID"/>
+                <field name="user_id" string="User"/>
+                <field name="state" string="Status"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        <h1>
+                                            Schedule ID:
+                                            <field name="schedule_reference"/>
+                                        </h1>
+                                    </li>
+                                    <li>
+                                        Title:
+                                        <field name="schedule_name"/>
+                                    </li>
+                                    <li>
+                                        User:
+                                        <field name="user_id"/>
+                                    </li>
+                                    <li>
+                                        Date Schedule:
+                                        <field name="date_schedule" string="Date Schedule"/>
+                                    </li>
+                                    <li>
+                                        Time Schedule:
+                                        <field name="time_schedule" string="Time Schedule"/>
+                                    </li>
+                                    <li>
+                                        Status:
+                                        <field name="state"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

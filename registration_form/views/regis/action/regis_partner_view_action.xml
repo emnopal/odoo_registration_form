@@ -12,7 +12,7 @@
         <!--To make kanban default view mode, rearrange it to first-->
         <!--This also applied for another view mode-->
         <!--from this (tree as default view): <field name="view_mode">tree,kanban,form</field>, to this: -->
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">tree,kanban,form</field>
 
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -29,6 +29,6 @@
               name="Partner"
               parent="regis_user_root"
               action="regis_user_partner_action"
-              sequence="2"/>
+              sequence="5"/>
 
 </odoo>
