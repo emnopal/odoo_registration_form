@@ -54,6 +54,8 @@
                             <!--How to hide field based on condition/context on menu,
                             so if there is hide_gender it will invisible-->
                             <field name="gender" invisible="context.get('hide_gender')"/>
+                            <!--This is computed field of schedule count (how many schedule per user)-->
+                            <field name="schedule_count" string="Schedule Count"/>
                         </group>
                         <group>
                             <field name="address"/>

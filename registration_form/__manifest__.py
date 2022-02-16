@@ -59,6 +59,10 @@
         'views/sale/inherit_sale.xml',  # new view for sale from inherited view
         # Schedule View
         'views/schedule/action/schedule_view_action.xml',
+        'views/schedule/action/schedule_cancel_view_action.xml',
+        'views/schedule/action/schedule_done_view_action.xml',
+        'views/schedule/action/schedule_confirm_view_action.xml',
+        'views/schedule/action/schedule_draft_view_action.xml',
         'views/schedule/view/schedule_view_form.xml',
         'views/schedule/view/schedule_view_kanban.xml',
         'views/schedule/view/schedule_view_search.xml',

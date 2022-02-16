@@ -16,6 +16,8 @@
                 <field name="gender"/>
                 <field name="address"/>
                 <field name="bio"/>
+                <!--This is computed field of schedule count (how many schedule per user)-->
+                <field name="schedule_count" string="Schedule Count"/>
                 <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
                 <field name="state" string="Status"/>
                 <field name="create_date" string="Account Created"/>
