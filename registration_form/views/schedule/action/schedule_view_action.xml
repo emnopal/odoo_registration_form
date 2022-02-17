@@ -23,4 +23,17 @@
               parent="schedule_user_root"
               action="schedule_user_action"
               sequence="1"/>
+
+        <!--
+        Instead of inside wizard view, add menu or submenu here, because
+        since in __manifest__ file, the wizard is loaded before view, so it will
+        give an error because of hierarchy import issues
+        -->
+
+    <menuitem id="create_schedule_user"
+              name="Create Schedule Wizard"
+              parent="schedule_user_root"
+              action="action_create_schedule_view"
+              sequence="5"/>
+
 </odoo>

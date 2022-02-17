@@ -40,6 +40,8 @@
         'data/regis_sequence.xml',  # this is sequence file, for sequencing the registration form
         'data/schedule_sequence.xml',  # this is sequence file, for sequencing the schedule form
         # third must be wizard file
+        # to create wizard, you must create new python module named wizard
+        'wizard/view_create_schedule_form.xml',  # this is wizard file, for creating schedule form
         # fourth must be view file
         'views/regis/action/regis_view_action.xml',
         'views/regis/action/regis_partner_view_action.xml',

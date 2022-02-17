@@ -10,6 +10,13 @@
             <form>
                 <!--Add status bar after header here-->
                 <header>
+                    <!--This is button of wizard, if the button is clicked it will show to wizard view-->
+                    <!--Just add the action of wizard into button name:
+                        if action of wizard outside the module(inherited): % (module_name.action_of_wizard)d
+                        if action of wizard inside the module: % (action_of_wizard)d
+                        type change to action-->
+                    <button id="button_create_schedule" string="Create a new Schedule" class="btn-primary"
+                            name="%(action_create_schedule_view)d" type="action"/>
                     <!--Adding button to statusbar-->
                     <!--This is dynamic button on statusbar that corresponding
                     to action that will change state in statusbar-->

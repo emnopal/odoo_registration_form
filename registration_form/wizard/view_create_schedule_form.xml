@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--this view form-->
+    <record id="view_create_schedule_form" model="ir.ui.view">
+        <field name="name">create.schedule.wizard.form</field>
+        <field name="model">create.schedule.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create New Schedule">
+                <group>
+                    <field name="name" string="Schedule Name"/>
+                    <field name="user_id" string="User"/>
+                </group>
+                <footer>
+                    <!--button will trigger on click-->
+                    <!--Must define action_create_schedule method inside model wizard class-->
+                    <button name="action_create_schedule" string="Create Schedule" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!--this action that give an action to corresponding form view above-->
+    <!--this is example of action create schedule view-->
+    <record id="action_create_schedule_view" model="ir.actions.act_window">
+        <field name="name">Create Schedule</field>
+        <field name="res_model">create.schedule.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_create_schedule_form"/> <!--ref view id above here-->
+        <field name="target">new</field> <!--this is target window, by default is new-->
+        <!--
+        Target window:
+        1. Current Window: keyword: current; will show the form in new window
+        2. New Window (default): keyword: new; will create the wizard
+        3. Inline edit: ??
+        4. Full Screen: ??
+        5. Main action of Current Window: ??
+        -->
+    </record>
+
+    <!--Don't add menu or submenu here, since in __manifest__ file, the wizard is loaded before view, so it will
+        give an error because of hierarchy import issues-->
+
+</odoo>
