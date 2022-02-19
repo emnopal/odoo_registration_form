@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_regis_user,access.regis.user,model_regis_user,,1,1,1,1
 access_schedule_user,access.schedule.user,model_schedule_user,,1,1,1,1
 access_create_schedule_wizard,access.create.schedule.wizard,model_create_schedule_wizard,,1,1,1,1
+access_regis_client,access.regis.client,model_regis_client,,1,1,1,1

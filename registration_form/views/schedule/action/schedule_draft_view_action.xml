@@ -18,6 +18,6 @@
               name="Draft"
               parent="schedule_user_root"
               action="schedule_user_draft_action"
-              sequence="4"/>
+              sequence="5"/>
 
 </odoo>

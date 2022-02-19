@@ -79,7 +79,7 @@
     <menuitem id="regis_status"
               name="Status"
               parent="regis_root"
-              sequence="2"/>
+              sequence="3"/>
 
     <!-- This is sub menu items that inherits from main menu item -->
     <!-- We need to link the action here, because if there is no action, the menu will not be shown -->

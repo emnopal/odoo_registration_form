@@ -16,7 +16,7 @@ class ScheduleUser(models.Model):
 
     schedule_name = fields.Char(string='Schedule Name', required=True, size=64, tracking=True)
     user_id = fields.Many2one('regis.user', string='User', required=True, tracking=True)
-    note = fields.Text(string='Bio', tracking=True)
+    note = fields.Text(string='Note', tracking=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirm', 'Confirm'),
@@ -30,9 +30,14 @@ class ScheduleUser(models.Model):
                                      copy=False, default=lambda self: _('New'))
 
     name_seq = fields.Char(string='Sequencing Name', compute='_compute_fields_combination_seq')
-    date_schedule = fields.Date(string='Date Schedule', tracking=True, default=fields.Date.today())
-    time_schedule = fields.Datetime(string='Time Schedule', tracking=True, default=fields.Datetime.now())
 
+    # this is field for date
+    # date_schedule = fields.Date(string='Date Schedule', tracking=True, default=fields.Date.today())
+
+    # this is field for datetime
+    date_schedule = fields.Datetime(string='Date Schedule', tracking=True, default=fields.Datetime.now(), required=True)
+
+    # this will add the data from related field
     # Add related field based on many2one field
     partner = fields.Many2one('res.partner', string='Partner', related='user_id.partner_id')
 
@@ -65,6 +70,7 @@ class ScheduleUser(models.Model):
         else:
             self.schedule_name = ""
 
+    # This will add the data from related field that correspond from m2o field
     @api.onchange('user_id')
     def onchange_address(self):
         if self.user_id:

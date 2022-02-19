@@ -16,13 +16,13 @@
     <menuitem id="schedule_user_root"
               name="Schedule"
               parent="regis_root"
-              sequence="3"/>
+              sequence="4"/>
 
     <menuitem id="schedule_user"
               name="All Schedule"
               parent="schedule_user_root"
               action="schedule_user_action"
-              sequence="1"/>
+              sequence="2"/>
 
         <!--
         Instead of inside wizard view, add menu or submenu here, because
@@ -31,9 +31,9 @@
         -->
 
     <menuitem id="create_schedule_user"
-              name="Create Schedule Wizard"
+              name="New Schedule"
               parent="schedule_user_root"
               action="action_create_schedule_view"
-              sequence="5"/>
+              sequence="1"/>
 
 </odoo>

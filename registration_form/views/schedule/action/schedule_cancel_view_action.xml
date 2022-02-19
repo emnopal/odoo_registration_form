@@ -18,6 +18,6 @@
               name="Cancel"
               parent="schedule_user_root"
               action="schedule_user_cancel_action"
-              sequence="5"/>
+              sequence="6"/>
 
 </odoo>

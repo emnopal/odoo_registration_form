@@ -46,6 +46,10 @@
                 </header>
                 <!--Sheet: to make border in form-->
                 <sheet>
+                    <!--Add image field here, must be placed here right after sheet tag-->
+                    <!--Image field is using widget image and class oe_avatar (this is must be included)-->
+                    <field name="avatar" widget="image" class="oe_avatar"/>
+                    <!--This is for title in form view, this title include Seq if default new + fullname-->
                     <div class="oe_title">
                         <h1>
                             <field name="fullname_seq"/>

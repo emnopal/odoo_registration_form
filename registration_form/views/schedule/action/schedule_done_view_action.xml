@@ -18,6 +18,6 @@
               name="Done"
               parent="schedule_user_root"
               action="schedule_user_done_action"
-              sequence="2"/>
+              sequence="3"/>
 
 </odoo>

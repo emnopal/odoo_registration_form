@@ -32,7 +32,6 @@
                             <field name="user_id" string="User"/>
                             <field name="partner" string="User Partner"/>
                             <field name="date_schedule" string="Date Schedule"/>
-                            <field name="time_schedule" string="Time Schedule"/>
                         </group>
                         <group>
                             <field name="note" string="Note"/>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_regis_client_search" model="ir.ui.view">
+        <field name="name">regis.client.search</field>
+        <field name="model">regis.client</field>
+        <field name="arch" type="xml">
+            <search string="Users">
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="user_id"/>
+                <field name="address"/>
+                <field name="bio"/>
+                <field name="reference" string="UID"/>
+                <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
+                    <filter name="address" string="Address" context="{'group_by':'address'}"/>
+                    <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

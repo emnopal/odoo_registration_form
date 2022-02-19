@@ -4,13 +4,14 @@
         <field name="name">schedule.user.kanban</field>
         <field name="model">schedule.user</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban sample="1"> <!--Sample is for creating dummy data if field is null-->
                 <field name="id"/>
                 <field name="schedule_name" string="Name"/>
                 <field name="note"/>
                 <field name="schedule_reference" string="Schedule ID"/>
                 <field name="user_id" string="User"/>
                 <field name="state" string="Status"/>
+                <field name="date_schedule"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
@@ -32,11 +33,7 @@
                                     </li>
                                     <li>
                                         Date Schedule:
-                                        <field name="date_schedule" string="Date Schedule"/>
-                                    </li>
-                                    <li>
-                                        Time Schedule:
-                                        <field name="time_schedule" string="Time Schedule"/>
+                                        <field name="date_schedule"/>
                                     </li>
                                     <li>
                                         Status:

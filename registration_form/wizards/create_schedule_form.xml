@@ -9,11 +9,15 @@
                 <group>
                     <field name="name" string="Schedule Name"/>
                     <field name="user_id" string="User"/>
+                    <field name="schedule_date" string="Schedule Date"/>
+                    <field name="note" string="Note"/>
                 </group>
                 <footer>
                     <!--button will trigger on click-->
                     <!--Must define action_create_schedule method inside model wizard class-->
                     <button name="action_create_schedule" string="Create Schedule" type="object" class="btn-primary"/>
+                    <!--This is button for viewing all schedule to user-->
+                    <button name="action_view_schedule" string="View Schedule" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
             </form>

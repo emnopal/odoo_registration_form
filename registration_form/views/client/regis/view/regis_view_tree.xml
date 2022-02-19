@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_regis_client_tree" model="ir.ui.view">
+        <field name="name">regis.client.tree</field>
+        <field name="model">regis.client</field>
+        <field name="arch" type="xml">
+            <tree sample="1"> <!--Sample is for creating dummy data if field is null-->
+                <field name="reference" string="UID"/>
+                <field name="fullname" string="Name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="address"/>
+                <field name="bio"/>
+                <field name="user_id" string="User"/>
+                <field name="create_date" string="Account Created"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

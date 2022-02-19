@@ -9,7 +9,15 @@
         <!-- For model: find it on models module -->
         <field name="model">regis.user</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree sample="1"> <!--Sample is for creating dummy data if field is null-->
+                <!--Button on header: only work with odoo version above 13, how to? same as in view form-->
+                <header>
+                    <button name="action_done" type="object" string="Mark as Done" class="btn-success"/>
+                    <!--state won't work in tree view, because tree view has multiple state record in one place
+                        and also, confirm attribute won't work in tree view and also id won't work here,
+                        so it just only name, type, string and class
+                        also the button only visible if you selected one or more record in odoo -->
+                </header>
                 <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
                 <field name="fullname" string="Name"/>
                 <field name="age"/>

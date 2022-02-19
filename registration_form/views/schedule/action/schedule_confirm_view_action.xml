@@ -19,6 +19,6 @@
               name="Confirm"
               parent="schedule_user_root"
               action="schedule_user_confirm_action"
-              sequence="3"/>
+              sequence="4"/>
 
 </odoo>

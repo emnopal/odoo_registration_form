@@ -8,7 +8,6 @@
                 <field name="schedule_name" string="Title"/>
                 <field name="user_id" string="User"/>
                 <field name="date_schedule" string="Date Schedule"/>
-                <field name="time_schedule" string="Time Schedule"/>
                 <field name="note"/>
                 <field name="schedule_reference" string="Schedule ID"/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>

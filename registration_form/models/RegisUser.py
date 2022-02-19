@@ -47,6 +47,7 @@ class RegisUser(models.Model):
     # vals is list of field that return the data field as dictionary
     # and create method is returning name of model db and their data that passed to db
     # more info: https://www.youtube.com/watch?v=_-fs_NBeOLI&list=PLqRRLx0cl0homY1elJbSoWfeQbRKJ-oPO&index=17
+    # same as default_get method, but this only executed when form is saved
     # @api.model
     # def create(self, vals):
     #     return super(RegisUser, self).create(vals)
@@ -58,6 +59,7 @@ class RegisUser(models.Model):
     # This is example how to override field with create method
     # to create default value of bio
     # for create method, don't need to iterate the data
+    # same as default_get method, but this only executed when form is saved
     @api.model
     def create(self, vals):
         if not vals.get('bio'):
@@ -184,3 +186,29 @@ class RegisUser(models.Model):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
             com.state = 'cancel'
+
+    # overriding default value with default_get method
+    # this method will be executed when form is opened
+    # field will return field of the model (RegisUser)
+    # super(RegisUser, self).default_get(fields) -> will return default value in model
+    # same as create method, but this method will be executed when form is opened
+    # so if form is opened, the value of field that specified in default_get will be returned
+    # for example, if you set res['note'] = 'test', the form if opened, the note field will be 'test'
+    # this is same as default value in view
+    # <field name="context">{'default_age':24}</field> this will fill the form age with 24
+    # why use this? because you can't set default value in view, only in model (server side) so it's more secure
+    # and this is more flexible and fast than default value in view, because view can't be inherited
+    @api.model
+    def default_get(self, fields):
+        # example
+        res = super(RegisUser, self).default_get(fields)
+        # if not res.get('gender'):
+        #     res['gender'] = 'female' # default is male
+        # return res
+        res['address'] = 'Jakarta, Indonesia'
+        res['bio'] = 'This is default bio, delete this line if you want to create other bio'
+        return res
+
+    # add image field
+    # by default image field is binary field
+    avatar = fields.Binary(string='Avatar')
