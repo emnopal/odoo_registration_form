@@ -2,6 +2,7 @@
 
 # To upgrade models you need to restart the server
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError # this is for validation error exception
 
 
 # Name of file must follow name of class
@@ -25,7 +26,7 @@ class ScheduleUser(models.Model):
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft', tracking=True, copy=False) # set copy to false, if you want to disable copy for this field
     address = fields.Text(string='Address', tracking=True)
 
     # Create sequence field
@@ -95,3 +96,20 @@ class ScheduleUser(models.Model):
 
     def action_cancel(self):
         self.state = 'cancel'
+
+    # override copy method
+    # this will override copy method if duplicate action is executed
+    def copy(self, default=None):
+        if default is None:
+            default = {}
+        default['schedule_name'] = self.schedule_name + _(' (copy)')
+        default['note'] = self.note + _('. This is copy of note')
+        return super(ScheduleUser, self).copy(default)
+
+    # for consistency reason, you shouldn't delete a record in done state
+    # for avoid this, you can override the delete method to prevent delete in done state
+    def unlink(self):
+        if self.state == 'done':
+            raise ValidationError(_(f"Can't delete a record {self.name_seq}, because status is done"))
+        return super(ScheduleUser, self).unlink()
+

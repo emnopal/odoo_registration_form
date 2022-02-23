@@ -58,6 +58,7 @@
                         <group>
                             <field name="first_name"/>
                             <field name="last_name"/>
+                            <field name="email"/> <!--example of unique constrains-->
                             <!--This is computed field of schedule count (how many schedule per user)-->
                             <field name="schedule_count" string="Schedule Count"/>
                         </group>

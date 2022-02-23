@@ -9,7 +9,7 @@
     <!--        <field name="arch" type="xml">-->
     <!--&lt;!&ndash;            <xpath expr="//field[@name='group_ids']" position="after">&ndash;&gt; in odoo >= 14 use xpath instead of field -->
     <!--                <field name="subscription_department_ids" widget="many2many_tags"-->
-    <!--                    string="Auto Subscribe Departments"/>-->
+    <!-- string="Auto Subscribe Departments"/>-->
     <!--            </xpath>-->
     <!--        </field>-->
     <!--    </record>-->
@@ -28,6 +28,7 @@
     </record>
 
     <!--Create new view tree in inherited views-->
+    <!--add other field in parent module from inherited module-->
     <record id="view_order_tree_inherit" model="ir.ui.view">
         <field name="name">sale.order.inherited</field>
         <field name="model">sale.order</field>
@@ -40,11 +41,17 @@
         </field>
     </record>
 
-    <!--Assign (new) action to sale from action above-->
-    <!--    <menuitem id="menu_sale_appointment"-->
-    <!--              name="Appointments"-->
-    <!--              parent="sale.sale_order_menu"-->
-    <!--              sequence="2"-->
-    <!--              action="action_registration_appointment"/>-->
+    <!--Add menu from inherited module to parent module-->
+    <!--make sure you've added parent module inside __manifest__.py-->
+    <menuitem id="menu_sale_user_regis"
+            name="User Registration"
+            parent="sale.sale_order_menu"
+            sequence="5"
+            action="regis_user_action"/>
+
+    <!--name: name in parent module-->
+    <!--parent: parent module and their menu id-->
+    <!--sequence: sequence-->
+    <!--action: action of inherited module in parent module-->
 
 </odoo>

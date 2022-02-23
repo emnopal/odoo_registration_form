@@ -30,6 +30,7 @@
                 <field name="fullname" string="Name" optional="show"/>
                 <field name="first_name" optional="hide"/>
                 <field name="last_name" optional="hide"/>
+                <field name="email" optional="hide"/> <!--example of unique constrains-->
                 <field name="age" optional="hide"/>
                 <field name="gender" optional="hide"/>
                 <field name="address" optional="hide"/>

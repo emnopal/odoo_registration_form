@@ -8,6 +8,7 @@
             <search string="Users">
                 <field name="first_name"/>
                 <field name="last_name"/>
+                <field name="email"/> <!--example of unique constrains-->
                 <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
                 <field name="client_id" string="Client"/>
                 <field name="address"/>

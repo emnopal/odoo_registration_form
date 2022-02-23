@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError # this is for validation error exception
 
 
 # this won't be shown in menu if it's not listed in the security rules
@@ -89,5 +90,30 @@ class RegisClient(models.Model):
     def default_get(self, fields):
         res = super(RegisClient, self).default_get(fields)
         res['address'] = 'Jakarta, Indonesia'
-        res['bio'] = 'This is default bio, delete this line if you want to create other bio'
+        res['bio'] = _('This is default bio, delete this line if you want to create other bio')
         return res
+
+    # override copy method
+    # this will override copy method if duplicate action is executed
+    def copy(self, default=None):
+        if default is None:
+            default = {}
+        default['first_name'] = self.first_name + _(' (copy)')
+        default['last_name'] = self.last_name + _(' (copy)')
+        default['bio'] = self.bio + _('. This is copy of bio')
+        return super(RegisClient, self).copy(default)
+
+    # not valid constraint
+    @api.constrains('age')
+    def check_age(self):
+        for rec in self:
+            if rec.age < 1 or rec.age > 150:
+                raise ValidationError(_(f"{rec.age} is not a valid age"))
+
+    # another example
+    @api.constrains('first_name', 'last_name')
+    def check_first_last_name(self):
+        for rec in self:
+            if rec.first_name == rec.last_name:
+                raise ValidationError(_(f"Not a valid name"))
+

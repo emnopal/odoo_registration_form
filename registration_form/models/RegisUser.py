@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # To upgrade models you need to restart the server
+import re
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError # this is for validation error exception
 
 
 # Name of file must follow name of class
@@ -39,7 +41,7 @@ class RegisUser(models.Model):
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft', tracking=True, copy=False) # set copy to false, if you want to disable copy for this field)
 
     client_id = fields.Many2one('regis.client', string='Client', tracking=True) # foreign key
 
@@ -108,6 +110,13 @@ class RegisUser(models.Model):
                     com.fullname_seq = f"{str(com.reference)} - {str(com.first_name).title()} {str(com.last_name).title()}"
             else:
                 com.fullname_seq = f"{str(com.reference)} - "
+
+    # or you can use name_get method to combine sequence and name
+    # def name_get(self):
+    #     result = []
+    #     for rec in self:
+    #         name = f"{rec.reference} - {rec.first_name} {rec.last_name}"
+    #         result.append((rec.id, name))
 
     # This is example how to create new field (fullname)
     # based from existing field (first, last)
@@ -221,9 +230,59 @@ class RegisUser(models.Model):
         #     res['gender'] = 'female' # default is male
         # return res
         res['address'] = 'Jakarta, Indonesia'
-        res['bio'] = 'This is default bio, delete this line if you want to create other bio'
+        res['bio'] = _('This is default bio, delete this line if you want to create other bio')
         return res
 
     # add image field
     # by default image field is binary field
     avatar = fields.Binary(string='Avatar')
+
+    # override copy method
+    # this will override copy method if duplicate action is executed
+    # note: _("str") is translation
+    def copy(self, default=None):
+        if default is None:
+            default = {}
+        default['first_name'] = self.first_name + _(' (copy)')
+        default['last_name'] = self.last_name + _(' (copy)')
+        default['bio'] = self.bio + _('. This is copy of bio')
+        return super(RegisUser, self).copy(default)
+
+
+    # for consistency reason, you shouldn't delete a record in done state
+    # for avoid this, you can override the delete method to prevent delete in done state
+    def unlink(self):
+        if self.state == 'done':
+            raise ValidationError(_(f"Can't delete a record {self.fullname_seq}, because status is done"))
+        return super(RegisUser, self).unlink()
+
+    # constrains
+    # unique constraints
+    # i create an example of unique constraint field
+    email = fields.Char(string='Email')
+
+    @api.constrains('email')
+    def check_email(self):
+        for rec in self:
+            is_email_available = self.env['regis.user'].search([('email', '=', rec.email), ('id', '!=', rec.id)])
+            if is_email_available:
+                raise ValidationError(_(f"Email {rec.email} is already used"))
+            else:
+                match =  re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email)
+                if match == None:
+                    raise ValidationError('Not a valid email address')
+
+    # not valid constraint
+    @api.constrains('age')
+    def check_age(self):
+        for rec in self:
+            if rec.age < 1 or rec.age > 150:
+                raise ValidationError(_(f"{rec.age} is not a valid age"))
+
+    # another example
+    @api.constrains('first_name', 'last_name')
+    def check_first_last_name(self):
+        for rec in self:
+            if rec.first_name == rec.last_name:
+                raise ValidationError(_(f"Not a valid name"))
+
