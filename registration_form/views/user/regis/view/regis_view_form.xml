@@ -24,23 +24,19 @@
                     For example, odoo will search name = action_confirm on regis.user model-->
                     <!--Specify state if you want to show only the button on another state scenario-->
                     <!--If you want to add confirmation button, add confirm parameter to button-->
-                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
-                            id="button_confirm" states="draft,done,cancel"
-                            confirm="Are you sure to set it to confirm?"/>
-                    <button name="action_done" type="object" string="Mark as Done" class="btn-success"
-                            id="button_done" states="draft,confirm,cancel"
-                            confirm="Are you sure to set it to done?"/>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" id="button_confirm"
+                            states="draft,done,cancel" confirm="Are you sure to set it to confirm?"/>
+                    <button name="action_done" type="object" string="Mark as Done" class="btn-success" id="button_done"
+                            states="draft,confirm,cancel" confirm="Are you sure to set it to done?"/>
                     <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
-                            id="button_draft" states="confirm,done,cancel"
-                            confirm="Are you sure to set it to draft?"/>
-                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
-                            id="button_cancel" states="confirm,done,draft"
-                            confirm="Are you sure to set it to cancel?"/>
+                            id="button_draft" states="confirm,done,cancel" confirm="Are you sure to set it to draft?"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger" id="button_cancel"
+                            states="confirm,done,draft" confirm="Are you sure to set it to cancel?"/>
                     <!--Need to specify statusbar as widget here, and if you want to create statusbar clickable,
                     you need to add options menu  and add clickable as true or 1
                     and if you want to show only some of statusbar state just add statusbar_visible-->
                     <!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
-                    <!--                           statusbar_visible="draft,confirm,done"/>-->
+                    <!-- statusbar_visible="draft,confirm,done"/>-->
                     <!--If status bar not clickable (using button to communicate)-->
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
                 </header>
@@ -55,39 +51,104 @@
                             <field name="fullname_seq"/>
                         </h1>
                     </div>
+
                     <!--Group: to make label visible-->
                     <group>
                         <!--Group: to make grouping for each label-->
                         <group>
                             <field name="first_name"/>
                             <field name="last_name"/>
-                            <field name="age"/>
-                            <!--How to hide field based on condition/context on menu,
-                            so if there is hide_gender it will invisible-->
-                            <field name="gender" invisible="context.get('hide_gender')"/>
                             <!--This is computed field of schedule count (how many schedule per user)-->
                             <field name="schedule_count" string="Schedule Count"/>
-                        </group>
-                        <group>
-                            <field name="address"/>
-                        </group>
-                        <group>
-                            <field name="bio"/>
                         </group>
                         <!--This is many2one field (example)-->
                         <group>
                             <field name="partner_id" string="Partner"/>
+                            <field name="client_id" string="Client"/>
                         </group>
                     </group>
+
+                    <!--this is notebook and page in form view-->
+                    <!--this is same as form view if you want to add field here-->
+                    <notebook>
+                        <page string="Client" name="client">
+                            <group>
+                                <field name="client_note" string="Note to Client"/>
+                            </group>
+                        </page>
+                        <page string="Partner" name="partner">
+                            <group>
+                                <field name="partner_note" string="Note to Partner"/>
+                            </group>
+                        </page>
+
+                        <!--this is how to define o2m fields in form view through notebook-->
+                        <!--this cannot directly add/update fields from tree view-->
+                        <page string="Contact or Social Media" name="contacts">
+                            <!--for o2m field, do not add group-->
+                            <field name="user_contact_ids"> <!--for aesthetically, do not add string to here-->
+                                <!--inside o2m field, you can add tree to show fields inside o2m fields-->
+                                <tree>
+                                    <field name="contact" string="Contact"/>
+                                    <field name="account" string="Account"/>
+                                    <field name="description" string="Description" optional="hide"/>
+                                </tree>
+                                <!--inside o2m field, also you can define form view-->
+                                <form>
+                                    <group>
+                                        <field name="contact"/>
+                                        <field name="account"/>
+                                    </group>
+                                    <group>
+                                        <field name="description"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                        <!--this is same as above, but you can directly edit the data from tree view-->
+                        <page string="Todo" name="todo">
+                            <!--for o2m field, do not add group-->
+                            <field name="user_todo_ids">
+                                <!--this is same as above, but you can directly edit the data from here-->
+                                <tree editable="bottom"><!--this will make form directly editable from tree view-->
+                                    <!--if I specify editable to top it will make a new form to the top,
+                                    so bottom to the bottom-->
+                                    <field name="name" string="Title"/>
+                                    <field name="description"/>
+                                    <field name="due_date"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Other Information" name="other_info">
+                            <group>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="bio"/>
+                            </group>
+                            <group>
+                                <field name="age"/>
+                                <!--How to hide field based on condition/context on menu,
+                                so if there is hide_gender it will invisible-->
+                                <field name="gender" invisible="context.get('hide_gender')"/>
+                            </group>
+                        </page>
+                    </notebook>
+
                 </sheet>
                 <!--If you want to add chatter form, please search inside odoo debug mode for module that has chatter form-->
                 <!--For example, I'm gonna adding it from sale.order view, and search for oe_chatter-->
                 <!--Chatter Form-->
                 <!--Chatter form located after sheet in form view-->
                 <div class="oe_chatter">
-                    <field name="message_follower_ids"/> <!--This is follower section on chatter-->
-                    <field name="activity_ids"/> <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
-                    <field name="message_ids"/> <!--This is message section on chatter-->
+                    <field name="message_follower_ids"/>
+                    <!--This is follower section on chatter-->
+                    <field name="activity_ids"/>
+                    <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
+                    <field name="message_ids"/>
+                    <!--This is message section on chatter-->
                 </div>
             </form>
         </field>

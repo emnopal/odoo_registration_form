@@ -13,7 +13,6 @@
                 <field name="address"/>
                 <field name="bio"/>
                 <field name="reference" string="UID"/>
-                <field name="user_id" string="Partner"/>
                 <field name="create_date" string="Account Created"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -37,10 +36,6 @@
                                     <li>
                                         Gender:
                                         <field name="gender"/>
-                                    </li>
-                                    <li>
-                                        User:
-                                        <field name="user_id"/>
                                     </li>
                                 </ul>
                             </div>

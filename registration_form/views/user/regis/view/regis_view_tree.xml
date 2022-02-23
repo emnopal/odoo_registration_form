@@ -9,7 +9,9 @@
         <!-- For model: find it on models module -->
         <field name="model">regis.user</field>
         <field name="arch" type="xml">
-            <tree sample="1"> <!--Sample is for creating dummy data if field is null-->
+            <!--you also can specify order here <tree default_order="field_name, desc|asc">-->
+            <!--you also can enable multiedit to tree view <tree multi_edit=1>, only for odoo 13 above-->
+            <tree sample="1" multi_edit="1">                <!--Sample is for creating dummy data if field is null-->
                 <!--Button on header: only work with odoo version above 13, how to? same as in view form-->
                 <header>
                     <button name="action_done" type="object" string="Mark as Done" class="btn-success"/>
@@ -18,17 +20,27 @@
                         so it just only name, type, string and class
                         also the button only visible if you selected one or more record in odoo -->
                 </header>
-                <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->
-                <field name="fullname" string="Name"/>
-                <field name="age"/>
-                <field name="gender"/>
-                <field name="address"/>
-                <field name="bio"/>
+                <!--dynamic view, is view that you can specify which field will be shown and not-->
+                <!--for example, you want to show name and not to show age, but you can change it age to show without
+                    changing the xml file-->
+                <!--if you want to make like that, you have to specify optional show (to show) | hide (to hide)-->
+                <!--if you not shown keyword optional, the default will be optional=show-->
+                <field name="reference" string="UID" optional="show"/>
+                <!--Reference here is sequence of user create-->
+                <field name="fullname" string="Name" optional="show"/>
+                <field name="first_name" optional="hide"/>
+                <field name="last_name" optional="hide"/>
+                <field name="age" optional="hide"/>
+                <field name="gender" optional="hide"/>
+                <field name="address" optional="hide"/>
+                <field name="bio" optional="hide"/>
                 <!--This is computed field of schedule count (how many schedule per user)-->
-                <field name="schedule_count" string="Schedule Count"/>
-                <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
-                <field name="state" string="Status"/>
-                <field name="create_date" string="Account Created"/>
+                <field name="schedule_count" string="Schedule Count" optional="hide"/>
+                <field name="partner_id" string="Partner" optional="hide"/>
+                <field name="client_id" string="Client" optional="hide"/>
+                <!--This is many2one field (example)-->
+                <field name="state" string="Status" optional="show"/>
+                <field name="create_date" string="Account Created" optional="hide"/>
             </tree>
         </field>
     </record>

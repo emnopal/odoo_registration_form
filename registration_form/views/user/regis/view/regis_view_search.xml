@@ -9,6 +9,7 @@
                 <field name="first_name"/>
                 <field name="last_name"/>
                 <field name="partner_id" string="Partner"/> <!--This is many2one field (example)-->
+                <field name="client_id" string="Client"/>
                 <field name="address"/>
                 <field name="bio"/>
                 <field name="reference" string="UID"/> <!--Reference here is sequence of user create-->

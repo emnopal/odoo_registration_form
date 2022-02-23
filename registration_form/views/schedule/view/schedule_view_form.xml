@@ -6,18 +6,10 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
-                            id="button_confirm" states="draft,done,cancel"
-                            confirm="Are you sure to set it to confirm?"/>
-                    <button name="action_done" type="object" string="Mark as Done" class="btn-success"
-                            id="button_done" states="draft,confirm,cancel"
-                            confirm="Are you sure to set it to done?"/>
-                    <button name="action_draft" type="object" string="Set as Draft" class="btn-warning"
-                            id="button_draft" states="confirm,done,cancel"
-                            confirm="Are you sure to set it to draft?"/>
-                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
-                            id="button_cancel" states="confirm,done,draft"
-                            confirm="Are you sure to set it to cancel?"/>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" id="button_confirm" states="draft,done,cancel" confirm="Are you sure to set it to confirm?"/>
+                    <button name="action_done" type="object" string="Mark as Done" class="btn-success" id="button_done" states="draft,confirm,cancel" confirm="Are you sure to set it to done?"/>
+                    <button name="action_draft" type="object" string="Set as Draft" class="btn-warning" id="button_draft" states="confirm,done,cancel" confirm="Are you sure to set it to draft?"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger" id="button_cancel" states="confirm,done,draft" confirm="Are you sure to set it to cancel?"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
                 </header>
                 <sheet>
@@ -33,13 +25,17 @@
                             <field name="partner" string="User Partner"/>
                             <field name="date_schedule" string="Date Schedule"/>
                         </group>
-                        <group>
-                            <field name="note" string="Note"/>
-                            <!--Writing into readonly onchange function: add force_save=1-->
-                            <field name="address" string="Address" readonly="1" force_save="1"/>
-                            <field name="age" string="Age"/>
-                        </group>
                     </group>
+                    <notebook>
+                        <page name="other_info" string="Other Information">
+                            <group>
+                                <field name="note" string="Note"/>
+                                <!--Writing into readonly onchange function: add force_save=1-->
+                                <field name="address" string="Address" readonly="1" force_save="1"/>
+                                <field name="age" string="Age"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>

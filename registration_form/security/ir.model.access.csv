@@ -3,3 +3,5 @@ access_regis_user,access.regis.user,model_regis_user,,1,1,1,1
 access_schedule_user,access.schedule.user,model_schedule_user,,1,1,1,1
 access_create_schedule_wizard,access.create.schedule.wizard,model_create_schedule_wizard,,1,1,1,1
 access_regis_client,access.regis.client,model_regis_client,,1,1,1,1
+access_user_todo,access.user.todo,model_user_todo,,1,1,1,1
+access_user_contact,access.user.contact,model_user_contact,,1,1,1,1

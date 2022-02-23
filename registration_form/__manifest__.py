@@ -48,7 +48,7 @@
 
         # third must be wizard file
         # to create wizard, you must create new python module named wizard
-        'wizards/create_schedule_form.xml',  # this is wizard file, for creating schedule form
+        'wizards/create_schedule_form_wizard.xml',  # this is wizard file, for creating schedule form
 
         # fourth must be view file
         # User

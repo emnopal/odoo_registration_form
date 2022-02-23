@@ -48,6 +48,10 @@
                                         Partner:
                                         <field name="partner_id"/>
                                     </li>
+                                    <li> <!--This is many2one field (example)-->
+                                        Client:
+                                        <field name="client_id" string="Client"/>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

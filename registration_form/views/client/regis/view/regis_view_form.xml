@@ -15,24 +15,30 @@
                         <group>
                             <field name="first_name"/>
                             <field name="last_name"/>
-                            <field name="age"/>
-                            <field name="gender"/>
-                        </group>
-                        <group>
-                            <field name="address"/>
-                        </group>
-                        <group>
-                            <field name="bio"/>
-                        </group>
-                        <group>
-                            <field name="user_id" string="User"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page name="other_info" string="Other Information">
+                            <group>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="bio"/>
+                            </group>
+                            <group>
+                                <field name="age"/>
+                                <field name="gender"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids"/> <!--This is follower section on chatter-->
-                    <field name="activity_ids"/> <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
-                    <field name="message_ids"/> <!--This is message section on chatter-->
+                    <field name="message_follower_ids"/>
+                    <!--This is follower section on chatter-->
+                    <field name="activity_ids"/>
+                    <!--This is activity, to create to do, appointments, etc., Need to inherit mail.activity.mixin in models-->
+                    <field name="message_ids"/>
+                    <!--This is message section on chatter-->
                 </div>
             </form>
         </field>

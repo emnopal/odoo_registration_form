@@ -7,7 +7,6 @@
             <search string="Users">
                 <field name="first_name"/>
                 <field name="last_name"/>
-                <field name="user_id"/>
                 <field name="address"/>
                 <field name="bio"/>
                 <field name="reference" string="UID"/>

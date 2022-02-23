@@ -16,6 +16,9 @@ class RegisUser(models.Model):
         'mail.activity.mixin'  # for activity in chatter
     ]
     _rec_name = 'fullname_seq'
+    # default order attribute, this will order by default of the field that specify here
+    # you can use 1 or more field, eg: _order = "name, age desc" desc for desc, asc for asc or _order = "name desc, age asc"
+    _order = "create_date desc, first_name asc"
 
     # specify the fields you want to add on inherit model
     # if you want to track the changes on the model (activate field tracking)
@@ -38,9 +41,21 @@ class RegisUser(models.Model):
         ('cancel', 'Cancel'),
     ], string='Status', default='draft', tracking=True)
 
+    client_id = fields.Many2one('regis.client', string='Client', tracking=True) # foreign key
+
     # Example of adding many2one field
     # We are going to use comodel_name res.partner as example
-    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', tracking=True)
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', tracking=True) # foreign key
+
+    # this is example for notebook and page section
+    client_note = fields.Text(string='Client Note', tracking=True)
+    partner_note = fields.Text(string='Partner Note', tracking=True)
+
+    # one2many fields or many2many fields
+    # naming field_name + _ids
+    # inverse_name: name of the field that refers to this model in other model, is required to define o2m field
+    user_todo_ids = fields.One2many(comodel_name='user.todo', inverse_name='user_id', string='User Todo') # foreign key
+    user_contact_ids = fields.One2many(comodel_name='user.contact', inverse_name='user_id', string='User Contact') # foreign key
 
     # Simple overriding method
     # This is example how to override create method

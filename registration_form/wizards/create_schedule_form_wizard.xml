@@ -32,6 +32,7 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_create_schedule_form"/> <!--ref view id above here-->
         <field name="target">new</field> <!--this is target window, by default is new-->
+        <field name="context">{}</field>
         <!--
         Target window:
         1. Current Window: keyword: current; will show the form in new window

@@ -12,6 +12,9 @@ class RegisClient(models.Model):
         'mail.activity.mixin'
     ]
     _rec_name = 'fullname_seq'
+    # default order attribute, this will order by default of the field that specify here
+    # you can use 1 or more field, eg: _order = "name, age desc" desc for desc, asc for asc or _order = "name desc, age asc"
+    _order = "create_date desc, first_name asc"
 
     first_name = fields.Char(string='First Name', required=True, size=64, tracking=True)
     last_name = fields.Char(string='Last Name', required=True, size=64, tracking=True)
@@ -22,8 +25,6 @@ class RegisClient(models.Model):
     ], required=True, default='male', tracking=True)
     address = fields.Text(string='Address', tracking=True)
     bio = fields.Text(string='Bio', tracking=True)
-
-    user_id = fields.Many2one(comodel_name='regis.user', string='User', tracking=True)
 
     # TODO: add one2many field here, to create user client
 

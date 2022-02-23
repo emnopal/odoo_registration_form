@@ -13,6 +13,9 @@ class ScheduleUser(models.Model):
         'mail.activity.mixin'  # for activity in chatter
     ]
     _rec_name = 'name_seq'
+    # default order attribute, this will order by default of the field that specify here
+    # you can use 1 or more field, eg: _order = "name, age desc" desc for desc, asc for asc or _order = "name desc, age asc"
+    _order = "create_date desc, schedule_name asc"
 
     schedule_name = fields.Char(string='Schedule Name', required=True, size=64, tracking=True)
     user_id = fields.Many2one('regis.user', string='User', required=True, tracking=True)
