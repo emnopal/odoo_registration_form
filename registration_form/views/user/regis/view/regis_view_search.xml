@@ -23,6 +23,9 @@
                 <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
                 <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
                 <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Unarchived" name="inactive" domain="[('active', '=', True)]"/>
                 <!--                <filter string="Child" name="child" domain="[('age', '<', '10')]"/>-->
                 <!--                <filter string="Teenagers" name="teenagers" domain="[('age', '>=', '10'),('age', '<', '23')]"/>-->
                 <!--                <filter string="Adult" name="adult" domain="[('age', '>=', '23'),('age', '<', '50')]"/>-->
@@ -31,6 +34,7 @@
                     <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
                     <filter name="address" string="Address" context="{'group_by':'address'}"/>
                     <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                    <filter name="inactive" string="Archived Status" context="{'group_by':'active'}"/>
                     <!--Added group by state (in statusbar)-->
                     <filter name="state" string="Status" context="{'group_by':'state'}"/>
                 </group>

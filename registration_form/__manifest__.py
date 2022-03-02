@@ -26,6 +26,8 @@
     'depends': [
         'sale',  # added sale here to make it work
         'mail',  # because mail is required since we use the mail.thread for Chatter view
+        'report_xlsx',  # added report_xlsx here to make it work
+        # https://apps.odoo.com/apps/modules/14.0/report_xlsx/
     ],
     # By default, all modules will inherit from base module of odoo
 
@@ -87,7 +89,20 @@
         'views/schedule/view/schedule_view_search.xml',
         'views/schedule/view/schedule_view_tree.xml',
 
+        # Action Server
+        'views/actions_server.xml',
+
         # fifth must be report file
+        # report
+        # PDF
+        'reports/report_user_card_pdf.xml',  # template
+        'reports/report_user_detail_pdf.xml',  # template
+        # XLSX
+        'reports/report_user_detail_xlsx.xml',  # template
+        # TEXT
+        'reports/report_user_detail_text.xml',  # template
+        # HTML
+        'reports/report_user_detail_html.xml',  # template
     ],
 
     # only loaded in demonstration mode

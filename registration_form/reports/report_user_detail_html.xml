@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--this is for appending (specify) the report to ir.actions.report db-->
+    <!--filename must be same with id-->
+    <!--HTML-->
+    <!--Creating a record by inheriting the 'ir.actions.report' model-->
+    <record id="report_user_detail_html" model="ir.actions.report"> <!-- must be same with report name and file-->
+        <field name="name">User Detail (HTML)</field> <!--Name of Report-->
+        <field name="model">regis.user</field> <!--Model you want to report-->
+        <field name="report_type">qweb-html</field> <!--Type of Report: qweb.(pdf,html,text)-->
+        <!--Name of Report (in DB), naming: {module_name}.{name_of_report}-->
+        <field name="report_name">registration_form.report_user_detail_html</field>
+        <!--this is for defined templates for the report, if you don't specify the templates, it will be an error-->
+        <!--name of template must be same with report_file-->
+        <!--File of report, naming (same as report name): {module_name}.{name_of_report}-->
+        <field name="report_file">registration_form.report_user_detail_html</field>
+        <!--Binding model for report, naming: model_{name_of_model}-->
+        <field name="binding_model_id" ref="model_regis_user"/>
+        <field name="binding_type">report</field> <!--Binding type of report-->
+    </record>
+
+    <!--this is for templating the report (this is mandatory, if u don't specify this, the report will be error)-->
+    <template id="report_user_detail_html">
+
+        <t t-call="web.html_container"> <!--container for containing all media into one page-->
+            <!--just like @foreach() in laravel, it's iterating all object in regis.user model as o-->
+
+            <t t-foreach="docs" t-as="o"> <!--for reading a media-->
+
+                <t t-call="web.external_layout"> <!--added header and footer-->
+
+                    <!--body-->
+                    <div class="page">
+
+                        <!--just like normal html-->
+                        <div class="oe_structure"/>
+
+                        <h3>User Details:</h3>
+                        <br/>
+                        <div class="row">
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>UID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Address</th>
+                                        <th>Bio</th>
+                                        <th>State</th>
+                                        <th>Client</th>
+                                        <th>Client Note</th>
+                                        <th>Partner</th>
+                                        <th>Partner Note</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <p t-field="o.reference"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.fullname"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.email"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.age"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.gender"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.address"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.bio"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.state"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.client_id.fullname"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.client_note"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.partner_id.name"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.partner_note"/>
+                                        </td>
+                                        <td>
+                                            <p t-field="o.create_date"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <br/>
+                        <h3>User Schedule:</h3>
+                        <span>Total Schedule:</span>
+                        <span t-field="o.schedule_count"/>
+                        <br/>
+                        <div class="row">
+                            <t t-if="o.schedule_ids">
+                                <table class="table table-sm o_main_table" name="user_todo">
+                                    <thead>
+                                        <tr>
+                                            <th>Schedule ID</th>
+                                            <th>Title</th>
+                                            <th>User</th>
+                                            <th>Note</th>
+                                            <th>State</th>
+                                            <th>Date Schedule</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.schedule_ids" t-as="schedule">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="schedule.schedule_reference"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="schedule.schedule_name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="schedule.user_id"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="schedule.note"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="schedule.state"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="schedule.date_schedule"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </div>
+
+                        <br/>
+                        <h3>User Todo:</h3>
+                        <br/>
+                        <div class="row">
+                            <t t-if="o.user_todo_ids">
+                                <table class="table table-sm o_main_table" name="user_todo">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.user_todo_ids" t-as="todo">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="todo.name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="todo.description"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="todo.due_date"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </div>
+
+                        <br/>
+                        <h3>User Contacts and Social Media:</h3>
+                        <br/>
+                        <div class="row">
+                            <t t-if="o.user_contact_ids">
+                                <table class="table table-sm o_main_table" name="user_contacts">
+                                    <thead>
+                                        <tr>
+                                            <th>Contact or Social Media</th>
+                                            <th>Account</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.user_contact_ids" t-as="contact">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="contact.contact"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="contact.account"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="contact.description"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

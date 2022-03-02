@@ -38,10 +38,22 @@
                     <!--                    <field name="state" widget="statusbar" options="{'clickable': '1'}"-->
                     <!-- statusbar_visible="draft,confirm,done"/>-->
                     <!--If status bar not clickable (using button to communicate)-->
+                    <!--add url actions-->
+                    <button name="action_url" type="object" string="Open External" class="btn-info"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
                 </header>
                 <!--Sheet: to make border in form-->
                 <sheet>
+                    <!--Add smart buttons div here-->
+                    <div class="oe_button_box" name="button_box">
+                        <!--Add smart button in here-->
+                        <button name="action_schedule_user" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <div class="o_stat_info">
+                                <field name="schedule_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Schedule</span>
+                            </div>
+                        </button>
+                    </div>
                     <!--Add image field here, must be placed here right after sheet tag-->
                     <!--Image field is using widget image and class oe_avatar (this is must be included)-->
                     <field name="avatar" widget="image" class="oe_avatar"/>
@@ -61,6 +73,7 @@
                             <field name="email"/> <!--example of unique constrains-->
                             <!--This is computed field of schedule count (how many schedule per user)-->
                             <field name="schedule_count" string="Schedule Count"/>
+                            <field name="active" invisible="1"/> <!--adding archive/unarchive in odoo-->
                         </group>
                         <!--This is many2one field (example)-->
                         <group>
@@ -81,6 +94,20 @@
                             <group>
                                 <field name="partner_note" string="Note to Partner"/>
                             </group>
+                        </page>
+
+                        <!--this is for schedule details-->
+                        <page string="Schedule Details" name="schedule">
+                            <!--for o2m field, do not add group-->
+                            <field name="schedule_ids"> <!--for aesthetically, do not add string to here-->
+                                <!--inside o2m field, you can add tree to show fields inside o2m fields-->
+                                <tree>
+                                    <field name="schedule_name" string="Schedule Name"/>
+                                    <field name="note" string="Note"/>
+                                    <field name="state" string="Status" optional="hide"/>
+                                    <field name="date_schedule" string="Due"/>
+                                </tree>
+                            </field>
                         </page>
 
                         <!--this is how to define o2m fields in form view through notebook-->

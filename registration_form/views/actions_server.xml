@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--actions for user.regis-->
+    <!--this is for customize action server button in odoo-->
+    <!--this will apply to entire odoo view with same model-->
+    <!--Confirm-->
+    <record id="action_confirm_user" model="ir.actions.server">
+        <field name="name">Confirm User</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field> <!--use code if u want to execute it from python code-->
+        <!--if state is code so action to do will be: Execute Python Code-->
+        <field name="model_id" ref="registration_form.model_regis_user"/>
+        <field name="binding_model_id" ref="registration_form.model_regis_user"/>
+        <field name="code">records.action_confirm()</field> <!--this is needed if state is code, it will execute method in the model-->
+    </record>
+
+    <!--Add more actions-->
+    <!--Done-->
+    <record id="action_done_user" model="ir.actions.server">
+        <field name="name">Mark as Done User</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field> <!--use code if u want to execute it from python code-->
+        <!--if state is code so action to do will be: Execute Python Code-->
+        <field name="model_id" ref="registration_form.model_regis_user"/>
+        <field name="binding_model_id" ref="registration_form.model_regis_user"/>
+        <field name="code">records.action_done()</field> <!--this is needed if state is code, it will execute method in the model-->
+    </record>
+
+    <!--actions for schedule.user-->
+    <!--this is for customize action server button in odoo-->
+    <!--this will apply to entire odoo view with same model-->
+    <!--Confirm-->
+    <record id="action_confirm_schedule" model="ir.actions.server">
+        <field name="name">Confirm Schedule</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field> <!--use code if u want to execute it from python code-->
+        <!--if state is code so action to do will be: Execute Python Code-->
+        <field name="model_id" ref="registration_form.model_schedule_user"/>
+        <field name="binding_model_id" ref="registration_form.model_schedule_user"/>
+        <field name="code">records.action_confirm()</field> <!--this is needed if state is code, it will execute method in the model-->
+    </record>
+
+    <!--Add more actions-->
+    <!--Done-->
+    <record id="action_done_schedule" model="ir.actions.server">
+        <field name="name">Mark as Done Schedule</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field> <!--use code if u want to execute it from python code-->
+        <!--if state is code so action to do will be: Execute Python Code-->
+        <field name="model_id" ref="registration_form.model_schedule_user"/>
+        <field name="binding_model_id" ref="registration_form.model_schedule_user"/>
+        <field name="code">records.action_done()</field> <!--this is needed if state is code, it will execute method in the model-->
+    </record>
+
+    <!--adding the wizard into actions server-->
+    <record id="action_create_schedule" model="ir.actions.server">
+        <field name="name">Create Schedule</field>
+        <field name="state">code</field> <!--use code if u want to execute it from python code-->
+        <!--if state is code so action to do will be: Execute Python Code-->
+        <field name="model_id" ref="registration_form.model_regis_user"/>
+        <field name="binding_model_id" ref="registration_form.model_regis_user"/>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            if record:
+                action_values = env.ref('registration_form.action_create_schedule_view').sudo().read()[0]
+                action_values.update({'context': env.context})
+                action = action_values
+        </field> <!--this is needed if state is code, it will execute method in the model-->
+    </record>
+</odoo>

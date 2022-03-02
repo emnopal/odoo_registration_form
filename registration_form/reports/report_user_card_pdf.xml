@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--this is for appending (specify) the report to ir.actions.report db-->
+    <!--filename must be same with id-->
+    <!--PDF-->
+    <!--Creating a record by inheriting the 'ir.actions.report' model-->
+    <record id="report_user_card_pdf" model="ir.actions.report"> <!--must be same with report name and file-->
+        <field name="name">User Card (PDF)</field> <!--Name of Report-->
+        <field name="model">regis.user</field> <!--Model you want to report-->
+        <field name="report_type">qweb-pdf</field> <!--Type of Report: qweb-(pdf,html,text)-->
+        <!--Name of Report (in DB), naming: {module_name}.{name_of_report}(with id)-->
+        <field name="report_name">registration_form.report_user_card_pdf</field>
+        <!--this is for defined templates for the report, if you don't specify the templates, it will be an error-->
+        <!--name of template must be same with report_file-->
+        <!--File of report, naming (same as report name): {module_name}.{name_of_report}(with id)-->
+        <field name="report_file">registration_form.report_user_card_pdf</field>
+        <!--Binding model for report, naming: model_{name_of_model}-->
+        <field name="binding_model_id" ref="model_regis_user"/>
+        <field name="binding_type">report</field> <!--Binding type of report-->
+    </record>
+
+    <!--this is for templating the report (this is mandatory, if u don't specify this, the report will be error)-->
+    <template id="report_user_card_pdf">
+        <t t-call="web.html_container"> <!--container for containing all media into one page-->
+            <!--just like @foreach() in laravel, it's iterating all object in regis.user model as o-->
+            <t t-foreach="docs" t-as="o"> <!--for reading a media-->
+                <t t-call="web.external_layout"> <!--added header and footer-->
+                    <!--body-->
+                    <div class="page">
+                        <!--just like normal html-->
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-2" style="margin:auto;">
+                            </div>
+                            <center>
+                                <div class="col-xs-8" style="margin:auto">
+                                    <table class="table table-condensed" style="border: 3px solid black !important;">
+                                        <tr>
+                                            <!--image-->
+                                            <td width="40%">
+                                                <p style="text-align:center;padding-top:10px;">
+                                                    <img t-if="not o.avatar"
+                                                         t-att-src="'/web/static/src/img/placeholder.png'" height="120"
+                                                         border="1" width="120"/>
+                                                    <img t-if="o.avatar"
+                                                         t-att-src="'data:image/png;base64,%s' % to_text(o.avatar)"
+                                                         height="120" border="1" width="120"/>
+                                                </p>
+                                                <p style="text-align:center;">
+                                                    <h2>
+                                                        <strong>
+                                                            <span t-field="o.reference"/>
+                                                            -
+                                                            <span t-field="o.first_name"/>
+                                                            <span t-field="o.last_name"/>
+                                                        </strong>
+                                                    </h2>
+                                                </p>
+                                            </td>
+                                            <td width="60%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;">
+                                                                <strong>Age:</strong>
+                                                            </p>
+                                                            <p style="text-align:right;">
+                                                                <strong>Gender:</strong>
+                                                            </p>
+                                                            <p style="text-align:right;">
+                                                                <strong>Address:</strong>
+                                                            </p>
+                                                            <p style="text-align:right;">
+                                                                <strong>Bio:</strong>
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"
+                                                               t-field="o.age"/>
+                                                            <p style="text-align:left;padding-left:10px;"
+                                                               t-field="o.gender"/>
+                                                            <p style="text-align:left;padding-left:10px;"
+                                                               t-field="o.address"/>
+                                                            <p style="text-align:left;padding-left:10px;"
+                                                               t-field="o.bio"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

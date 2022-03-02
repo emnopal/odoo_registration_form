@@ -53,7 +53,7 @@ class CreateScheduleWizard(models.TransientModel):  # Wizard don't need to store
     def action_view_schedule(self):
         # this will return the view to corresponding user schedule
 
-        # Method 1:
+        # Method 1: Deprecated
         # action = self.env['ir.actions.act_window'].for_xml_id('registration_form.schedule_user_action')
         # action["domain"] = [("user_id", "=", self.user_id.id)]  # this will filter the schedule based on user
         # return action

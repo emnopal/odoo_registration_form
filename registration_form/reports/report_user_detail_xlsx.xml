@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Method 1-->
+    <!--this is for appending (specify) the report to ir.actions.report db-->
+    <!--filename must be same with id-->
+    <!--XLSX-->
+    <!--Creating a record by inheriting the 'ir.actions.report' model-->
+    <record id="report_user_detail_xlsx" model="ir.actions.report"> <!--must be same with report name and file-->
+        <field name="name">User Detail (XLSX)</field> <!--Name of Report-->
+        <field name="model">regis.user</field> <!--Model you want to report-->
+        <field name="report_type">xlsx</field>
+        <!--Name of Report (in DB), naming: {module_name}.{name_of_report}-->
+        <field name="report_name">registration_form.report_user_detail_xlsx</field>
+        <!--this is for defined templates for the report, if you don't specify the templates, it will be an error-->
+        <!--name of template must be same with report_file-->
+        <!--File of report, naming (same as report name): {module_name}.{name_of_report}-->
+        <field name="report_file">registration_form.report_user_detail_xlsx</field>
+        <!--Binding model for report, naming: model_{name_of_model}-->
+        <field name="binding_model_id" ref="model_regis_user"/>
+        <field name="binding_type">report</field> <!--Binding type of report-->
+    </record>
+
+</odoo>

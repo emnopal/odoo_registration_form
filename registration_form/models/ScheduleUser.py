@@ -86,16 +86,28 @@ class ScheduleUser(models.Model):
     # To add action into statusbar you have to create method on the class
     # since on the xml view, we specify type equal to object
     def action_confirm(self):
-        self.state = 'confirm'
+        for status in self:
+            if status.state == 'confirm':
+                raise ValidationError(_('You cannot confirm twice'))
+            status.state = 'confirm'
 
     def action_done(self):
-        self.state = 'done'
+        for status in self:
+            if status.state == 'done':
+                raise ValidationError(_('Schedule is already done'))
+            status.state = 'done'
 
     def action_draft(self):
-        self.state = 'draft'
+        for status in self:
+            if status.state == 'draft':
+                raise ValidationError(_('Schedule is already draft'))
+            status.state = 'draft'
 
     def action_cancel(self):
-        self.state = 'cancel'
+        for status in self:
+            if status.state == 'cancel':
+                raise ValidationError(_('Schedule is already cancel'))
+            status.state = 'cancel'
 
     # override copy method
     # this will override copy method if duplicate action is executed
@@ -113,3 +125,5 @@ class ScheduleUser(models.Model):
             raise ValidationError(_(f"Can't delete a record {self.name_seq}, because status is done"))
         return super(ScheduleUser, self).unlink()
 
+    # create archive/unarchive button
+    active = fields.Boolean(string='Active', default=True) # default is True, if default is False, so all of data will be archived

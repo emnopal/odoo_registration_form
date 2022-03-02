@@ -117,3 +117,5 @@ class RegisClient(models.Model):
             if rec.first_name == rec.last_name:
                 raise ValidationError(_(f"Not a valid name"))
 
+    # create archive/unarchive button
+    active = fields.Boolean(string='Active', default=True) # default is True, if default is False, so all of data will be archived

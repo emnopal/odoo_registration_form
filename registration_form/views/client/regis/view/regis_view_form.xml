@@ -28,6 +28,7 @@
                             <group>
                                 <field name="age"/>
                                 <field name="gender"/>
+                                <field name="active" invisible="1"/> <!--adding archive/unarchive in odoo-->
                             </group>
                         </page>
                     </notebook>

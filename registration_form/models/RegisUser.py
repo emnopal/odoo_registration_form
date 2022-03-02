@@ -3,7 +3,7 @@
 # To upgrade models you need to restart the server
 import re
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError # this is for validation error exception
+from odoo.exceptions import ValidationError  # this is for validation error exception
 
 
 # Name of file must follow name of class
@@ -41,13 +41,14 @@ class RegisUser(models.Model):
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
-    ], string='Status', default='draft', tracking=True, copy=False) # set copy to false, if you want to disable copy for this field)
+    ], string='Status', default='draft', tracking=True,
+        copy=False)  # set copy to false, if you want to disable copy for this field)
 
-    client_id = fields.Many2one('regis.client', string='Client', tracking=True) # foreign key
+    client_id = fields.Many2one('regis.client', string='Client', tracking=True)  # foreign key
 
     # Example of adding many2one field
     # We are going to use comodel_name res.partner as example
-    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', tracking=True) # foreign key
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', tracking=True)  # foreign key
 
     # this is example for notebook and page section
     client_note = fields.Text(string='Client Note', tracking=True)
@@ -56,8 +57,9 @@ class RegisUser(models.Model):
     # one2many fields or many2many fields
     # naming field_name + _ids
     # inverse_name: name of the field that refers to this model in other model, is required to define o2m field
-    user_todo_ids = fields.One2many(comodel_name='user.todo', inverse_name='user_id', string='User Todo') # foreign key
-    user_contact_ids = fields.One2many(comodel_name='user.contact', inverse_name='user_id', string='User Contact') # foreign key
+    user_todo_ids = fields.One2many(comodel_name='user.todo', inverse_name='user_id', string='User Todo')  # foreign key
+    user_contact_ids = fields.One2many(comodel_name='user.contact', inverse_name='user_id',
+                                       string='User Contact')  # foreign key
 
     # Simple overriding method
     # This is example how to override create method
@@ -194,21 +196,29 @@ class RegisUser(models.Model):
     def action_confirm(self):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
+            if com.state == 'confirm':
+                raise ValidationError(_("User already confirmed"))
             com.state = 'confirm'
 
     def action_done(self):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
+            if com.state == 'done':
+                raise ValidationError(_("User already done"))
             com.state = 'done'
 
     def action_draft(self):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
+            if com.state == 'draft':
+                raise ValidationError(_("User already draft"))
             com.state = 'draft'
 
     def action_cancel(self):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
+            if com.state == 'cancel':
+                raise ValidationError(_("User already cancel"))
             com.state = 'cancel'
 
     # overriding default value with default_get method
@@ -248,7 +258,6 @@ class RegisUser(models.Model):
         default['bio'] = self.bio + _('. This is copy of bio')
         return super(RegisUser, self).copy(default)
 
-
     # for consistency reason, you shouldn't delete a record in done state
     # for avoid this, you can override the delete method to prevent delete in done state
     def unlink(self):
@@ -268,7 +277,7 @@ class RegisUser(models.Model):
             if is_email_available:
                 raise ValidationError(_(f"Email {rec.email} is already used"))
             else:
-                match =  re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email)
+                match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email)
                 if match == None:
                     raise ValidationError('Not a valid email address')
 
@@ -286,3 +295,27 @@ class RegisUser(models.Model):
             if rec.first_name == rec.last_name:
                 raise ValidationError(_(f"Not a valid name"))
 
+    # relating to schedule
+    schedule_ids = fields.One2many('schedule.user', 'user_id', string='Schedule Details')
+
+    def action_url(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': 'https://www.google.com/',
+            'target': 'new',  # new, open in new tab. self, open in current tab
+        }
+
+
+    # this is action for smart button in odoo
+    def action_schedule_user(self):
+        return {
+            "name": _("Schedule"),
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "tree,form",
+            "res_model": "schedule.user",
+            "domain": [("user_id", "=", self.id)],
+        }
+
+    # create archive/unarchive button
+    active = fields.Boolean(string='Active', default=True) # default is True, if default is False, so all of data will be archived
