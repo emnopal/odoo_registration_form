@@ -3,7 +3,8 @@
 # To upgrade models you need to restart the server
 import re
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError  # this is for validation error exception
+# this is for validation error exception
+from odoo.exceptions import ValidationError
 
 
 # Name of file must follow name of class
@@ -25,8 +26,10 @@ class RegisUser(models.Model):
     # specify the fields you want to add on inherit model
     # if you want to track the changes on the model (activate field tracking)
     # set tracking = True
-    first_name = fields.Char(string='First Name', required=True, size=64, tracking=True)
-    last_name = fields.Char(string='Last Name', required=True, size=64, tracking=True)
+    first_name = fields.Char(
+        string='First Name', required=True, size=64, tracking=True)
+    last_name = fields.Char(
+        string='Last Name', required=True, size=64, tracking=True)
     age = fields.Integer(string='Age', size=5, tracking=True)
     gender = fields.Selection([
         ('male', 'Male'),
@@ -44,11 +47,13 @@ class RegisUser(models.Model):
     ], string='Status', default='draft', tracking=True,
         copy=False)  # set copy to false, if you want to disable copy for this field)
 
-    client_id = fields.Many2one('regis.client', string='Client', tracking=True)  # foreign key
+    client_id = fields.Many2one(
+        'regis.client', string='Client', tracking=True)  # foreign key
 
     # Example of adding many2one field
     # We are going to use comodel_name res.partner as example
-    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', tracking=True)  # foreign key
+    partner_id = fields.Many2one(
+        comodel_name='res.partner', string='Partner', tracking=True)  # foreign key
 
     # this is example for notebook and page section
     client_note = fields.Text(string='Client Note', tracking=True)
@@ -57,9 +62,10 @@ class RegisUser(models.Model):
     # one2many fields or many2many fields
     # naming field_name + _ids
     # inverse_name: name of the field that refers to this model in other model, is required to define o2m field
-    user_todo_ids = fields.One2many(comodel_name='user.todo', inverse_name='user_id', string='User Todo')  # foreign key
-    user_contact_ids = fields.One2many(comodel_name='user.contact', inverse_name='user_id',
-                                       string='User Contact')  # foreign key
+    user_todo_ids = fields.One2many(
+        comodel_name='user.todo', inverse_name='user_id', string='User Todo')  # foreign key
+    user_contact_ids = fields.One2many(
+        comodel_name='user.contact', inverse_name='user_id', string='User Contact')  # foreign key
 
     # Simple overriding method
     # This is example how to override create method
@@ -86,7 +92,8 @@ class RegisUser(models.Model):
 
         # this is how to add sequence to the form
         if vals.get('reference', _('New')) == _('New'):
-            vals['reference'] = self.env['ir.sequence'].next_by_code('regis.user') or _('New')
+            vals['reference'] = self.env['ir.sequence'].next_by_code(
+                'regis.user') or _('New')
 
         return super(RegisUser, self).create(vals)
 
@@ -99,7 +106,8 @@ class RegisUser(models.Model):
     # This is example how to create new field (fullname) and sequence it
     # based from existing field (first, last)
     # This is computed field
-    fullname_seq = fields.Char(string='Sequencing Fullname', compute='_compute_fields_combination_seq')
+    fullname_seq = fields.Char(
+        string='Sequencing Fullname', compute='_compute_fields_combination_seq')
 
     # unless if compute method has depended on other field (with api.depends decorator)
     # naming will be: _compute_fields_ + {other name that explain how the method is working (optional)}
@@ -123,7 +131,8 @@ class RegisUser(models.Model):
     # This is example how to create new field (fullname)
     # based from existing field (first, last)
     # This is computed field
-    fullname = fields.Char(string='Fullname', compute='_compute_fields_combination')
+    fullname = fields.Char(
+        string='Fullname', compute='_compute_fields_combination')
 
     # unless if compute method has depended on other field (with api.depends decorator)
     # naming will be: _compute_fields_ + {other name that explain how the method is working (optional)}
@@ -142,7 +151,8 @@ class RegisUser(models.Model):
     # This is computed field
 
     # Compute how many schedule per user
-    schedule_count = fields.Integer(string='Schedule Count', compute='_compute_schedule_count')
+    schedule_count = fields.Integer(
+        string='Schedule Count', compute='_compute_schedule_count')
 
     # naming: _compute_ + {field name} + _ + {other name that explain how the method is working (optional)}
     # (_ before compute means it is private method)
@@ -157,7 +167,8 @@ class RegisUser(models.Model):
         # this is a solution
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
-            com.schedule_count = self.env['schedule.user'].search_count([('user_id', '=', com.id)])
+            com.schedule_count = self.env['schedule.user'].search_count(
+                [('user_id', '=', com.id)])
         # equivalent with: select count(*) from `schedule_user` where `user_id` = `self.id`
         # if search_count without argument, it will return number of records in schedule_user
 
@@ -240,7 +251,8 @@ class RegisUser(models.Model):
         #     res['gender'] = 'female' # default is male
         # return res
         res['address'] = 'Jakarta, Indonesia'
-        res['bio'] = _('This is default bio, delete this line if you want to create other bio')
+        res['bio'] = _(
+            'This is default bio, delete this line if you want to create other bio')
         return res
 
     # add image field
@@ -262,7 +274,8 @@ class RegisUser(models.Model):
     # for avoid this, you can override the delete method to prevent delete in done state
     def unlink(self):
         if self.state == 'done':
-            raise ValidationError(_(f"Can't delete a record {self.fullname_seq}, because status is done"))
+            raise ValidationError(
+                _(f"Can't delete a record {self.fullname_seq}, because status is done"))
         return super(RegisUser, self).unlink()
 
     # constrains
@@ -273,12 +286,10 @@ class RegisUser(models.Model):
     @api.constrains('email')
     def check_email(self):
         for rec in self:
-            is_email_available = self.env['regis.user'].search([('email', '=', rec.email), ('id', '!=', rec.id)])
-            if is_email_available:
+            if self.env['regis.user'].search([('email', '=', rec.email), ('id', '!=', rec.id)]):
                 raise ValidationError(_(f"Email {rec.email} is already used"))
             else:
-                match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email)
-                if match == None:
+                if not re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email):
                     raise ValidationError('Not a valid email address')
 
     # not valid constraint
@@ -296,7 +307,8 @@ class RegisUser(models.Model):
                 raise ValidationError(_(f"Not a valid name"))
 
     # relating to schedule
-    schedule_ids = fields.One2many('schedule.user', 'user_id', string='Schedule Details')
+    schedule_ids = fields.One2many(
+        'schedule.user', 'user_id', string='Schedule Details')
 
     def action_url(self):
         return {
@@ -304,7 +316,6 @@ class RegisUser(models.Model):
             'url': 'https://www.google.com/',
             'target': 'new',  # new, open in new tab. self, open in current tab
         }
-
 
     # this is action for smart button in odoo
     def action_schedule_user(self):
@@ -315,7 +326,9 @@ class RegisUser(models.Model):
             "view_mode": "tree,form",
             "res_model": "schedule.user",
             "domain": [("user_id", "=", self.id)],
+            "context": {"default_user_id": self.id},
         }
 
     # create archive/unarchive button
-    active = fields.Boolean(string='Active', default=True) # default is True, if default is False, so all of data will be archived
+    # default is True, if default is False, so all of data will be archived
+    active = fields.Boolean(string='Active', default=True)

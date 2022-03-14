@@ -44,6 +44,9 @@
                 </header>
                 <!--Sheet: to make border in form-->
                 <sheet>
+                    <!-- add ribbon view here excatly after sheet tag -->
+                    <!--this is archived ribbon-->
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <!--Add smart buttons div here-->
                     <div class="oe_button_box" name="button_box">
                         <!--Add smart button in here-->

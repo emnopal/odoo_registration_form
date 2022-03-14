@@ -6,6 +6,9 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <!-- add ribbon view here excatly after sheet tag -->
+                    <!--this is archived ribbon-->
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div class="oe_title">
                         <h1>
                             <field name="fullname_seq"/>

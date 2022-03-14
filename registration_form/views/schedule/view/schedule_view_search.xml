@@ -20,7 +20,15 @@
                 <group expand="1" string="Group By">
                     <filter name="user_id" string="User" context="{'group_by':'user_id'}"/>
                     <filter name="state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="inactive" string="Archived Status" context="{'group_by':'active'}"/>
                 </group>
+                <!--this is search panel, panel for search in odoo through sidebar-->
+                <searchpanel>
+                    <!--select multi and enable counters is for multiple selected in search panel
+                        delete if you don;t want to multiple selected-->
+                    <field name="state" string="Status" select="multi" enable_counters="1"/> <!--this is for searching status-->
+                    <field name="user_id" string="User" select="multi" enable_counters="1"/> <!--this is for searching user-->
+                </searchpanel>
             </search>
         </field>
     </record>

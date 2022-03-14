@@ -75,8 +75,12 @@
         'views/client/regis/view/regis_view_search.xml',
         'views/client/regis/view/regis_view_tree.xml',
 
+        # if you have inherited new view from other module, then you have to upgrade the inherited module, not from parent module
         # Sale inherited view
         'views/sale/inherit_sale.xml',  # new view for sale from inherited view
+
+        # Inherited res.partner view
+        'views/partner/partner_view_inherited.xml',  # new view for partner from inherited view
 
         # Schedule View
         'views/schedule/action/schedule_view_action.xml',

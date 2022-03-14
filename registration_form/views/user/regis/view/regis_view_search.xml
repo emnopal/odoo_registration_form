@@ -37,7 +37,16 @@
                     <filter name="inactive" string="Archived Status" context="{'group_by':'active'}"/>
                     <!--Added group by state (in statusbar)-->
                     <filter name="state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="partner_id" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter name="client_id" string="Client" context="{'group_by':'client_id'}"/>
                 </group>
+                <!--this is search panel, panel for search in odoo through sidebar-->
+                <searchpanel>
+                    <!--select multi and enable counters is for multiple selected in search panel
+                        delete if you don;t want to multiple selected-->
+                    <field name="state" string="Status" select="multi" enable_counters="1"/> <!--this is for searching status-->
+                    <field name="gender" string="Gender" select="multi" enable_counters="1"/> <!--this is for searching gender-->
+                </searchpanel>
             </search>
         </field>
     </record>

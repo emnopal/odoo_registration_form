@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--this will override a installed view from inherited view (without editing base module)-->
+    <!--this is inherited res.partner model from res_partner module-->
+    <record id="partner_view_inherited" model="ir.ui.view">
+        <field name="name">res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <!--this will move email field to before phone field-->
+            <xpath expr="//field[@name='phone']" position="before">
+                <field name="email" position="move"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

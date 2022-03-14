@@ -20,7 +20,14 @@
                     <filter name="gender" string="Gender" context="{'group_by':'gender'}"/>
                     <filter name="address" string="Address" context="{'group_by':'address'}"/>
                     <filter name="age" string="Age" context="{'group_by':'age'}"/>
+                    <filter name="inactive" string="Archived Status" context="{'group_by':'active'}"/>
                 </group>
+                <!--this is search panel, panel for search in odoo through sidebar-->
+                <searchpanel>
+                    <!--select multi and enable counters is for multiple selected in search panel
+                        delete if you don;t want to multiple selected-->
+                    <field name="gender" string="Gender" select="multi" enable_counters="1"/> <!--this is for searching gender-->
+                </searchpanel>
             </search>
         </field>
     </record>

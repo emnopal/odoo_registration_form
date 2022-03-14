@@ -10,8 +10,8 @@ class CreateScheduleWizard(models.TransientModel):  # Wizard don't need to store
     _name = "create.schedule.wizard"  # odoo standard is {name_of_model_in_db}.wizard
     _description = "Wizard for creating a schedule"
 
-    name = fields.Char(string="Name")
-    schedule_date = fields.Datetime(string="Schedule Date")
+    name = fields.Char(string="Name", required=True)
+    schedule_date = fields.Datetime(string="Schedule Date", required=True)
     user_id = fields.Many2one(comodel_name="regis.user", string="User", required=True)
     note = fields.Text(string="Note")
 
@@ -73,3 +73,13 @@ class CreateScheduleWizard(models.TransientModel):  # Wizard don't need to store
             "domain": [("user_id", "=", self.user_id.id)],
             "context": {"default_user_id": self.user_id.id},
         }
+
+
+    # this is default get method, so it will override active_id of users
+    # instead giving null for corresponding user, it will give the user_id of the wizard
+    @api.model
+    def default_get(self, fields_list):
+        res = super(CreateScheduleWizard, self).default_get(fields_list)
+        if self._context.get('active_id'):
+            res['user_id'] = self._context.get('active_id')
+        return res

@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <!--you also can specify order here <tree default_order="field_name, desc|asc">-->
             <!--you also can enable multiedit to tree view <tree multi_edit=1>, only for odoo 13 above-->
-            <tree sample="1" multi_edit="1">                <!--Sample is for creating dummy data if field is null-->
+            <tree sample="1" multi_edit="1" expand="1">                <!--Sample is for creating dummy data if field is null-->
                 <!--Button on header: only work with odoo version above 13, how to? same as in view form-->
                 <header>
                     <button name="action_done" type="object" string="Mark as Done" class="btn-success"/>
