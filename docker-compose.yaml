@@ -3,43 +3,59 @@ version: '3.8'
 services:
 
   postgres:
-    image: postgres:9.6.7
-    ports:
-      - "5432:5432"
-    expose:
-      - 5432
+    image: postgres:13
+    restart: always
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_DB=odoo
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
-      - PGDATA=/var/lib/postgresql/data/odoo/
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_USER: odoo
+      PGDATA: /var/lib/postgresql/data/odoo
     volumes:
-      - odoo:/var/lib/postgresql/data/odoo/
-      - ./init-db-odoo.sh:/docker-entrypoint-initdb.d/init-db-odoo.sh
-    networks:
-      - odoodb
+      - odoo-db-data:/var/lib/postgresql/data/odoo/
+    ports:
+      - 5432:5432/tcp
+
+  pgadmin:
+    image: dpage/pgadmin4:5.4
+    restart: always
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80/tcp"
+    links:
+      - "postgres:postgres"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: test
+    depends_on:
+      - postgres
 
   odoo:
-    build: .
+    image: odoo:14.0
     restart: always
     depends_on:
       - postgres
     links:
-      - postgres:postgres
+      - "postgres:postgres"
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./config/odoo:/etc/odoo
+      - odoo-web-data:/var/lib/odoo
     ports:
-      - "8069:8069"
-    expose:
-      - 8069
-    networks:
-      - odooweb
-      - odoodb
+      - "8069:8069/tcp"
 
-networks:
-  odoodb:
-    driver: bridge
-  odooweb:
-    driver: bridge
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - odoo
+    restart: always
 
 volumes:
-  odoo:
+  odoo-db-data:
+  odoo-web-data:
+  pgadmin-data:
