@@ -27,8 +27,6 @@ class RegisClient(models.Model):
     address = fields.Text(string='Address', tracking=True)
     bio = fields.Text(string='Bio', tracking=True)
 
-    # TODO: add one2many field here, to create user client
-
     reference = fields.Char(string='Reference', required=True, readonly=True, tracking=True, copy=False,
                             default=lambda self: _('New'))
 

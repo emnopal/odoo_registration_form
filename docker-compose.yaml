@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   postgres:
     image: postgres:13
@@ -12,6 +13,7 @@ services:
       - odoo-db-data:/var/lib/postgresql/data/odoo/
     ports:
       - 5432:5432/tcp
+
   pgadmin:
     image: dpage/pgadmin4:5.4
     restart: always
@@ -26,6 +28,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: test
     depends_on:
       - postgres
+
   odoo:
     image: odoo:14.0
     restart: always
@@ -39,6 +42,7 @@ services:
       - odoo-web-data:/var/lib/odoo
     ports:
       - 8069:8069/tcp
+
   nginx:
     image: nginx:latest
     volumes:
@@ -49,6 +53,18 @@ services:
     depends_on:
       - odoo
     restart: always
+
+  ngrok:
+    image: wernight/ngrok:latest
+    ports:
+      - 4040:4040
+    environment:
+      NGROK_PROTOCOL: http
+      NGROK_PORT: nginx:80
+      NGROK_AUTH: ${NGROK_AUTH}
+    depends_on:
+      - nginx
+
 volumes:
   odoo-db-data:
   odoo-web-data:
