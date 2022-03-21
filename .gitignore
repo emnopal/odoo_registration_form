@@ -6,3 +6,5 @@ addons/rest-framework/*
 !addons/rest-framework/README.md
 addons/report_xlsx/*
 !addons/report_xlsx/README.md
+addons/server-auth/*
+!addons/server-auth/README.md
