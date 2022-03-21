@@ -53,6 +53,9 @@ services:
     depends_on:
       - odoo
     restart: always
+    links:
+      - odoo:odoo
+      - pgadmin:pgadmin
 
   ngrok:
     image: wernight/ngrok:latest

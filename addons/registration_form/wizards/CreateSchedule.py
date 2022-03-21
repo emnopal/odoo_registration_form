@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # need to add view of the wizard inside wizard folder not in views folder
 # wizard is in WindowAction
+from email.policy import default
 from odoo import api, fields, models, _
 
 
@@ -11,7 +12,7 @@ class CreateScheduleWizard(models.TransientModel):  # Wizard don't need to store
     _description = "Wizard for creating a schedule"
 
     name = fields.Char(string="Name", required=True)
-    schedule_date = fields.Datetime(string="Schedule Date", required=True)
+    schedule_date = fields.Datetime(string="Schedule Date", default=lambda self: fields.datetime.now())
     user_id = fields.Many2one(comodel_name="regis.user", string="User", required=True)
     note = fields.Text(string="Note")
 

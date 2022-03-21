@@ -18,7 +18,7 @@ class ScheduleUser(models.Model):
     # you can use 1 or more field, eg: _order = "name, age desc" desc for desc, asc for asc or _order = "name desc, age asc"
     _order = "create_date desc, schedule_name asc"
 
-    schedule_name = fields.Char(string='Schedule Name', required=True, size=64, tracking=True)
+    schedule_name = fields.Char(string='Schedule Name', required=True, tracking=True)
     user_id = fields.Many2one('regis.user', string='User', required=True, tracking=True)
     note = fields.Text(string='Note', tracking=True)
     state = fields.Selection([

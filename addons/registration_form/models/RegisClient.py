@@ -17,9 +17,9 @@ class RegisClient(models.Model):
     # you can use 1 or more field, eg: _order = "name, age desc" desc for desc, asc for asc or _order = "name desc, age asc"
     _order = "create_date desc, first_name asc"
 
-    first_name = fields.Char(string='First Name', required=True, size=64, tracking=True)
-    last_name = fields.Char(string='Last Name', required=True, size=64, tracking=True)
-    age = fields.Integer(string='Age', size=5, tracking=True)
+    first_name = fields.Char(string='First Name', required=True, tracking=True)
+    last_name = fields.Char(string='Last Name', required=True, tracking=True)
+    age = fields.Integer(string='Age', tracking=True)
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female')

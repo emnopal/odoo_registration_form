@@ -27,10 +27,10 @@ class RegisUser(models.Model):
     # if you want to track the changes on the model (activate field tracking)
     # set tracking = True
     first_name = fields.Char(
-        string='First Name', required=True, size=64, tracking=True)
+        string='First Name', required=True, tracking=True)
     last_name = fields.Char(
-        string='Last Name', required=True, size=64, tracking=True)
-    age = fields.Integer(string='Age', size=5, tracking=True)
+        string='Last Name', required=True, tracking=True)
+    age = fields.Integer(string='Age', tracking=True)
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female')
