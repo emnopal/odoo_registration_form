@@ -1,1 +1,0 @@
-Please clone this: https://github.com/OCA/server-auth.git

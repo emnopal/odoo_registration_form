@@ -9,11 +9,11 @@
         <field name="model">regis.user</field> <!--Model you want to report-->
         <field name="report_type">qweb-pdf</field> <!--Type of Report: qweb-(pdf,html,text)-->
         <!--Name of Report (in DB), naming: {module_name}.{name_of_report}(with id)-->
-        <field name="report_name">report_user_card_pdf</field>
+        <field name="report_name">registration_form.report_user_card_pdf</field>
         <!--this is for defined templates for the report, if you don't specify the templates, it will be an error-->
         <!--name of template must be same with report_file-->
         <!--File of report, naming (same as report name): {module_name}.{name_of_report}(with id)-->
-        <field name="report_file">report_user_card_pdf</field>
+        <field name="report_file">registration_form.report_user_card_pdf</field>
         <!--Binding model for report, naming: model_{name_of_model}-->
         <field name="binding_model_id" ref="model_regis_user"/>
         <field name="binding_type">report</field> <!--Binding type of report-->

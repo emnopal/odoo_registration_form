@@ -2,9 +2,11 @@ __pycache__
 *.pyc
 .env
 notes.txt
-addons/rest-framework/*
-!addons/rest-framework/README.md
-addons/report_xlsx/*
-!addons/report_xlsx/README.md
-addons/server-auth/*
-!addons/server-auth/README.md
+addons/*
+!addons/registration_form
+!addons/registration_form/
+!addons/registration_form/*
+!addons/registration_form/**
+!addons/README.md
+__pycache__
+*.pyc

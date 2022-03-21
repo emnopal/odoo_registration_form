@@ -30,7 +30,7 @@ services:
       - postgres
 
   odoo:
-    image: odoo:14.0
+    build: .
     restart: always
     depends_on:
       - postgres

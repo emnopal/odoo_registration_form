@@ -1,0 +1,21 @@
+# generated from manifests external_dependencies
+apispec>=4.0.0
+cerberus
+extendable
+graphene
+graphql_server
+jsondiff
+marshmallow
+marshmallow-objects>=2.0.0
+parse-accept-language
+pyquerystring
+promise # Needed by graphene.test.Client
+pyjwt
+pyjwt[cryptography]
+cryptography
+email_validator
+lxml
+pysaml2
+python-jose
+python-ldap
+zxcvbn
