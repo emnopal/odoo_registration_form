@@ -1,0 +1,1 @@
+Clone this repo: https://github.com/yezyilomo/odoo-rest-api

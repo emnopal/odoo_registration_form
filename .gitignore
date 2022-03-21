@@ -2,7 +2,7 @@ __pycache__
 *.pyc
 .env
 notes.txt
-odoo-rest-api/
+odoo-rest-api/*
 !odoo-rest-api/README.md
-report_xlsx/
+report_xlsx/*
 !report_xlsx/README.md
