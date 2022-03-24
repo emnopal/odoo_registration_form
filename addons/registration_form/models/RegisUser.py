@@ -2,10 +2,13 @@
 
 # To upgrade models you need to restart the server
 import re
+import logging
 from odoo import api, fields, models, _
 # this is for validation error exception
 from odoo.exceptions import ValidationError
 
+_logger = logging.getLogger(__name__) # Show logs based on the module name
+# if you want to log validation error, use Warning instead of any
 
 # Name of file must follow name of class
 class RegisUser(models.Model):
@@ -208,6 +211,7 @@ class RegisUser(models.Model):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
             if com.state == 'confirm':
+                _logger.warning('User already confirmed')
                 raise ValidationError(_("User already confirmed"))
             com.state = 'confirm'
 
@@ -215,6 +219,7 @@ class RegisUser(models.Model):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
             if com.state == 'done':
+                _logger.warning('User already done')
                 raise ValidationError(_("User already done"))
             com.state = 'done'
 
@@ -222,6 +227,7 @@ class RegisUser(models.Model):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
             if com.state == 'draft':
+                _logger.warning('User already draft')
                 raise ValidationError(_("User already draft"))
             com.state = 'draft'
 
@@ -229,6 +235,7 @@ class RegisUser(models.Model):
         # so best practice is always iterate odoo module to avoid any singleton error
         for com in self:
             if com.state == 'cancel':
+                _logger.warning('User already cancel')
                 raise ValidationError(_("User already cancel"))
             com.state = 'cancel'
 
@@ -268,12 +275,14 @@ class RegisUser(models.Model):
         default['first_name'] = self.first_name + _(' (copy)')
         default['last_name'] = self.last_name + _(' (copy)')
         default['bio'] = self.bio + _('. This is copy of bio')
+        _logger.info(f"{default['id']} is coppied")
         return super(RegisUser, self).copy(default)
 
     # for consistency reason, you shouldn't delete a record in done state
     # for avoid this, you can override the delete method to prevent delete in done state
     def unlink(self):
         if self.state == 'done':
+            _logger.warning(f"Can't delete a record {self.fullname_seq}, because status is done")
             raise ValidationError(
                 _(f"Can't delete a record {self.fullname_seq}, because status is done"))
         return super(RegisUser, self).unlink()
@@ -287,9 +296,11 @@ class RegisUser(models.Model):
     def check_email(self):
         for rec in self:
             if self.env['regis.user'].search([('email', '=', rec.email), ('id', '!=', rec.id)]):
+                _logger.warning(f"Email {rec.email} is already used")
                 raise ValidationError(_(f"Email {rec.email} is already used"))
             else:
                 if not re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', rec.email):
+                    _logger.warning(f"Email {rec.email} is not valid")
                     raise ValidationError('Not a valid email address')
 
     # not valid constraint
@@ -297,6 +308,7 @@ class RegisUser(models.Model):
     def check_age(self):
         for rec in self:
             if rec.age < 1 or rec.age > 150:
+                _logger.warning(f"Age {rec.age} is not valid")
                 raise ValidationError(_(f"{rec.age} is not a valid age"))
 
     # another example
@@ -304,6 +316,7 @@ class RegisUser(models.Model):
     def check_first_last_name(self):
         for rec in self:
             if rec.first_name == rec.last_name:
+                _logger.warning(f"Not a valid name")
                 raise ValidationError(_(f"Not a valid name"))
 
     # relating to schedule

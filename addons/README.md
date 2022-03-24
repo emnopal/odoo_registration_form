@@ -1,8 +1,2 @@
-To make REST API in Odoo, Clone this following repository and move to addons:
-
-- https://github.com/OCA/connector.git
-- https://github.com/OCA/rest-framework.git
-- https://github.com/OCA/server-auth.git
-
 Must installed addons (because registration_form depends on it):
-- https://github.com/OCA/reporting-engine
+- fork this: https://github.com/OCA/reporting-engine/report_xlsx

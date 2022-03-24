@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError # this is for validation error exception
 
+_logger = logging.getLogger(__name__) # Show logs based on the module name
+# if you want to log validation error, use Warning instead of any
 
 # this won't be shown in menu if it's not listed in the security rules
 class RegisClient(models.Model):
@@ -99,6 +102,7 @@ class RegisClient(models.Model):
         default['first_name'] = self.first_name + _(' (copy)')
         default['last_name'] = self.last_name + _(' (copy)')
         default['bio'] = self.bio + _('. This is copy of bio')
+        _logger.warning(f"{default['id']} is coppied")
         return super(RegisClient, self).copy(default)
 
     # not valid constraint
@@ -106,6 +110,7 @@ class RegisClient(models.Model):
     def check_age(self):
         for rec in self:
             if rec.age < 1 or rec.age > 150:
+                _logger.warning('Age is not valid')
                 raise ValidationError(_(f"{rec.age} is not a valid age"))
 
     # another example
@@ -113,6 +118,7 @@ class RegisClient(models.Model):
     def check_first_last_name(self):
         for rec in self:
             if rec.first_name == rec.last_name:
+                _logger.warning('Not a valid name')
                 raise ValidationError(_(f"Not a valid name"))
 
     # create archive/unarchive button

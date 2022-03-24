@@ -20,7 +20,7 @@
     </record>
 
     <!--this is for templating the report (this is mandatory, if u don't specify this, the report will be error)-->
-    <template id="report_user_card_pdf">
+    <template id="registration_form.report_user_card_pdf">
         <t t-call="web.html_container"> <!--container for containing all media into one page-->
             <!--just like @foreach() in laravel, it's iterating all object in regis.user model as o-->
             <t t-foreach="docs" t-as="o"> <!--for reading a media-->

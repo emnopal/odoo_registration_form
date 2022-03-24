@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 # To upgrade models you need to restart the server
+import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError # this is for validation error exception
 
+_logger = logging.getLogger(__name__) # Show logs based on the module name
+# if you want to log validation error, use Warning instead of any
 
 # Name of file must follow name of class
 class ScheduleUser(models.Model):
@@ -88,24 +91,28 @@ class ScheduleUser(models.Model):
     def action_confirm(self):
         for status in self:
             if status.state == 'confirm':
+                _logger.warning(f"Schedule {status.name_seq} is already confirm")
                 raise ValidationError(_('You cannot confirm twice'))
             status.state = 'confirm'
 
     def action_done(self):
         for status in self:
             if status.state == 'done':
+                _logger.warning(f"Schedule {status.name_seq} is already done")
                 raise ValidationError(_('Schedule is already done'))
             status.state = 'done'
 
     def action_draft(self):
         for status in self:
             if status.state == 'draft':
+                _logger.warning(f"Schedule {status.name_seq} is already draft")
                 raise ValidationError(_('Schedule is already draft'))
             status.state = 'draft'
 
     def action_cancel(self):
         for status in self:
             if status.state == 'cancel':
+                _logger.warning(f"Schedule {status.name_seq} is already cancel")
                 raise ValidationError(_('Schedule is already cancel'))
             status.state = 'cancel'
 
@@ -116,12 +123,14 @@ class ScheduleUser(models.Model):
             default = {}
         default['schedule_name'] = self.schedule_name + _(' (copy)')
         default['note'] = self.note + _('. This is copy of note')
+        _logger.info(f"Schedule {self.name_seq} is copied")
         return super(ScheduleUser, self).copy(default)
 
     # for consistency reason, you shouldn't delete a record in done state
     # for avoid this, you can override the delete method to prevent delete in done state
     def unlink(self):
         if self.state == 'done':
+            _logger.warning(f"Schedule {self.name_seq} is already done")
             raise ValidationError(_(f"Can't delete a record {self.name_seq}, because status is done"))
         return super(ScheduleUser, self).unlink()
 
