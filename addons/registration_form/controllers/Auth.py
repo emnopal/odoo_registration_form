@@ -3,18 +3,56 @@ from odoo import http, _, exceptions
 from odoo.http import request, Response
 from .Utils import JsonValidResponse
 
-ENDPOINT = '/api'
 ENDPOINT_AUTH = '/api/auth'
 
 
 class Auth(http.Controller):
 
-    # Do not use json.dumps if type=='json'
+    """
+    just for example
+    Do not use json.dumps if type=='json'
+
+    @http.route(
+        f'{ENDPOINT}/test/<type:param>',
+        auth="user", type="json", methods=['GET'], csrf=False
+    )
+    def SampleRoute(self, param):
+        args = request.httprequest.args # get parameter from url
+        jsonargs = request.jsonrequest # get parameter from json
+        data = {
+            'param1': args.get('param1'),
+            'param2': args.get('param2'),
+        }
+        return JsonValidResponse(data)
+    """
+
     @http.route(
         f'{ENDPOINT_AUTH}/login',
         auth="none", type="json", methods=['POST'], csrf=False
     )
     def Login(self):
+
+        """
+        Authenticate User
+
+        Allowed Method:
+            - POST
+
+        required parameter:
+            - db: str
+            - login: str
+            - password: str
+
+        optional parameter:
+            None
+
+        usage:
+            - only required parameter: http://<host>:<port>/api/auth/login
+
+        return:
+            - JsonValidResponse: dict
+        """
+
         params = request.jsonrequest
         try:
             request.session.authenticate(
@@ -30,6 +68,27 @@ class Auth(http.Controller):
         auth="user", type="json", methods=['POST', 'GET'], csrf=False
     )
     def Logout(self):
+
+        """
+        Remove Session
+
+        Allowed Method:
+            - GET
+            - POST
+
+        required parameter:
+            None
+
+        optional parameter:
+            None
+
+        usage:
+            - only required parameter: http://<host>:<port>/api/auth/logout
+
+        return:
+            - JsonValidResponse: dict
+        """
+
         try:
             Response.status = "200"
             request.session.logout(keep_db=True)
