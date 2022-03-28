@@ -1,6 +1,7 @@
 import json
 from odoo import http, _, exceptions
-from odoo.http import request, Response  # need authentication to odoo
+from odoo.http import request, Response
+from .Utils import JsonValidResponse
 
 ENDPOINT = '/api'
 ENDPOINT_AUTH = '/api/auth'
@@ -13,19 +14,13 @@ class Auth(http.Controller):
         f'{ENDPOINT_AUTH}/login',
         auth="none", type="json", methods=['POST'], csrf=False
     )
-    def login(self):
+    def Login(self):
         params = request.jsonrequest
         try:
             request.session.authenticate(
                 params['db'], params['login'], params['password'])
             Response.status = "200"
-            return {
-                'status_code': Response.status,
-                'message': 'success',
-                'response': {
-                    'data': request.env['ir.http'].session_info()
-                }
-            }
+            return JsonValidResponse(request.env['ir.http'].session_info())
         except Exception as e:
             Response.status = "400"
             raise exceptions.AccessDenied(message=e)
@@ -34,17 +29,12 @@ class Auth(http.Controller):
         f'{ENDPOINT_AUTH}/logout',
         auth="user", type="json", methods=['POST', 'GET'], csrf=False
     )
-    def logout(self):
+    def Logout(self):
         try:
             Response.status = "200"
             request.session.logout(keep_db=True)
-            return {
-                'status_code': Response.status,
-                'message': 'success',
-                'response': {
-                    'message': _('Logout successful')
-                }
-            }
+            data = {'message': _('Logout successful')}
+            return JsonValidResponse(data)
         except Exception as e:
             Response.status = "400"
             raise exceptions.AccessDenied(message=e)

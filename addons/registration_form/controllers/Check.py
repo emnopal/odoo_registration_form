@@ -1,18 +1,20 @@
+import imp
 import json
 from odoo import http, _
+from .Utils import JsonValidResponse
 
 
 class Check(http.Controller):
 
+    """
+        Check if server still alive
+    """
+
     @http.route(
         '/api/ping',
-        auth="public", type="http", csrf=False
+        auth="public", type="json", csrf=False
     )
     def CheckServer(self):
-        return json.dumps({
-            'status_code': 200,
-            'message': 'success',
-            'response': {
-                'message': _('okay, everything is working fine')
-            }
+        return JsonValidResponse({
+            'message': _('okay, everything is working fine')
         })
