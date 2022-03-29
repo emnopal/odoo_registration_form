@@ -1,8 +1,10 @@
-from odoo import http, _
+import logging
+from odoo import http, _, exceptions
 from odoo.http import request
-from .Utils import JsonValidResponse
+from .Utils import JsonErrorResponse, JsonValidResponse
 
 ENDPOINT = '/api/model'
+_logging = logging.getLogger(__name__)
 
 
 class RegistrationFormRest(http.Controller):
@@ -26,11 +28,10 @@ class RegistrationFormRest(http.Controller):
     """
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>',],
+        [f'{ENDPOINT}/<string:model>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
     def GetDatasInModel(self, model):
-
         """
         Get All Data in Model
 
@@ -45,8 +46,8 @@ class RegistrationFormRest(http.Controller):
             - Ids: str|int
 
         usage:
-            - only required parameter: http://<host>:<port>/api/model/model.name
-            - with optional parameter: http://<host>:<port>/api/model/model.name?fields=field1,field2&ids=1,2,3
+            - only required parameter: /api/model/model.name
+            - with optional parameter: /api/model/model.name?fields=field1,field2&ids=1,2,3
 
         return:
             - JsonValidResponse: dict
@@ -54,17 +55,24 @@ class RegistrationFormRest(http.Controller):
 
         args = request.httprequest.args
 
-        record = request.env[model].sudo().search([])
+        try:
+            record = request.env[model].sudo().search([])
+        except Exception as e:
+            return JsonErrorResponse(f"Invalid model {e}")
 
         if args.get('ids'):
-            ids = list(map(int, args.get('ids').split(',') if args.get('ids') else []))
+            ids = list(map(int, args.get('ids').split(
+                ',') if args.get('ids') else []))
             record = request.env[model].sudo().browse(ids)
 
         records = record.read()
 
         if args.get('field') and args.get('field').strip() != '':
             fields = args.get('field').split(',')
-            records = record.read(fields)
+            try:
+                records = record.read(fields)
+            except Exception as e:
+                return JsonErrorResponse(e)
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -72,11 +80,10 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>/<string:field>',],
+        [f'{ENDPOINT}/<string:model>/<string:field>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
     def GetDatasFromAFieldInModel(self, model, field):
-
         """
         Get All Data in Model based on a field
 
@@ -91,8 +98,8 @@ class RegistrationFormRest(http.Controller):
             - Ids: str|int
 
         usage:
-            - only required parameter: http://<host>:<port>/api/model/model.name/field
-            - with optional parameter: http://<host>:<port>/api/model/model.name/field?ids=1,2,3
+            - only required parameter: /api/model/model.name/field
+            - with optional parameter: /api/model/model.name/field?ids=1,2,3
 
         return:
             - JsonValidResponse: dict
@@ -100,13 +107,23 @@ class RegistrationFormRest(http.Controller):
 
         args = request.httprequest.args
 
-        record = request.env[model].sudo().search([])
+        try:
+            record = request.env[model].sudo().search([])
+        except Exception as e:
+            return JsonErrorResponse(f"Invalid model {e}")
 
         if args.get('ids'):
-            ids = list(map(int, args.get('ids').split(',') if args.get('ids') else []))
-            record = request.env[model].sudo().browse(ids)
+            ids = list(map(int, args.get('ids').split(
+                ',') if args.get('ids') else []))
+            try:
+                record = request.env[model].sudo().browse(ids)
+            except Exception as e:
+                return JsonErrorResponse(f"Invalid model {e}")
 
-        records = record.read([field])
+        try:
+            records = record.read([field])
+        except Exception as e:
+            return JsonErrorResponse(e)
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -114,11 +131,10 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>/<int:ids>',],
+        [f'{ENDPOINT}/<string:model>/<int:ids>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
     def GetADataInModel(self, model, ids):
-
         """
         Get A Data in Model
 
@@ -133,8 +149,8 @@ class RegistrationFormRest(http.Controller):
             - Fields: str
 
         usage:
-            - only required parameter: http://<host>:<port>/api/model/model.name/1
-            - with optional parameter: http://<host>:<port>/api/model/model.name/1?fields=field1,field2
+            - only required parameter: /api/model/model.name/1
+            - with optional parameter: /api/model/model.name/1?fields=field1,field2
 
         return:
             - JsonValidResponse: dict
@@ -142,12 +158,19 @@ class RegistrationFormRest(http.Controller):
 
         args = request.httprequest.args
 
-        record = request.env[model].sudo().browse([ids])
+        try:
+            record = request.env[model].sudo().browse(ids)
+        except Exception as e:
+            return JsonErrorResponse(f"Invalid model {e}")
+
         records = record.read()
 
         if args.get('field') and args.get('field').strip() != '':
             fields = args.get('field').split(',')
-            records = record.read(fields)
+            try:
+                records = record.read(fields)
+            except Exception as e:
+                return JsonErrorResponse(e)
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -155,11 +178,10 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>/<int:ids>/<string:field>',],
+        [f'{ENDPOINT}/<string:model>/<int:ids>/<string:field>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
     def GetADataFromAFieldInModel(self, model, ids, field):
-
         """
         Get A Data in Model based on a field
 
@@ -175,7 +197,7 @@ class RegistrationFormRest(http.Controller):
             None
 
         usage:
-            - only required parameter: http://<host>:<port>/api/model/model.name/1/field
+            - only required parameter: /api/model/model.name/1/field
 
         return:
             - JsonValidResponse: dict
@@ -183,11 +205,17 @@ class RegistrationFormRest(http.Controller):
 
         args = request.httprequest.args
 
-        record = request.env[model].sudo().browse([ids])
-        records = record.read([field])
+        try:
+            record = request.env[model].sudo().browse([ids])
+        except Exception as e:
+            return JsonErrorResponse(f"Invalid model {e}")
+
+        try:
+            records = record.read([field])
+        except Exception as e:
+            return JsonErrorResponse(e)
 
         return JsonValidResponse({
             'length_record': len(records),
             'record': records,
         })
-

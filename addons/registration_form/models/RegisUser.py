@@ -7,10 +7,12 @@ from odoo import api, fields, models, _
 # this is for validation error exception
 from odoo.exceptions import ValidationError
 
-_logger = logging.getLogger(__name__) # Show logs based on the module name
+_logger = logging.getLogger(__name__)  # Show logs based on the module name
 # if you want to log validation error, use Warning instead of any
 
 # Name of file must follow name of class
+
+
 class RegisUser(models.Model):
     _name = "regis.user"
     _description = "User Registration Form"
@@ -282,7 +284,8 @@ class RegisUser(models.Model):
     # for avoid this, you can override the delete method to prevent delete in done state
     def unlink(self):
         if self.state == 'done':
-            _logger.warning(f"Can't delete a record {self.fullname_seq}, because status is done")
+            _logger.warning(
+                f"Can't delete a record {self.fullname_seq}, because status is done")
             raise ValidationError(
                 _(f"Can't delete a record {self.fullname_seq}, because status is done"))
         return super(RegisUser, self).unlink()

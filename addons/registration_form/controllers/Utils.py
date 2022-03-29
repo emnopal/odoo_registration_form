@@ -1,11 +1,12 @@
+from odoo.http import Response
 import json
 
 
 class DatetimeEncoder(json.JSONEncoder):
 
     """
-        Avoid `TypeError: Object of type datetime is not JSON serializable` Exception
-        https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable
+    Avoid `TypeError: Object of type datetime is not JSON serializable` Exception
+    https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable
     """
 
     def default(self, obj):
@@ -15,14 +16,25 @@ class DatetimeEncoder(json.JSONEncoder):
             return str(obj)
 
 
-def JsonValidResponse(data, status=200):
+def JsonValidResponse(data, valid_code=200):
     """
-        Return a JsonResponse with the given data and status code.
+    Return a JsonResponse with the given data and status code if code is valid or no exceptions.
     """
+    Response.status = str(valid_code)
     return {
-        'status_code': status,
+        'status_code': valid_code,
         'message': 'success',
-        'response': {
-            'data': data
-        }
+        'data': data
     }
+
+def JsonErrorResponse(error, error_code=400):
+    """
+    Return a JsonResponse with the given data and status code if code is not valid or with exceptions.
+    """
+    Response.status = str(error_code)
+    return {
+        'code': error_code,
+        'message': 'failed',
+        'error': error
+    }
+

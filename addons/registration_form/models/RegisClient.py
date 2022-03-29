@@ -2,12 +2,15 @@
 
 import logging
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError # this is for validation error exception
+# this is for validation error exception
+from odoo.exceptions import ValidationError
 
-_logger = logging.getLogger(__name__) # Show logs based on the module name
+_logger = logging.getLogger(__name__)  # Show logs based on the module name
 # if you want to log validation error, use Warning instead of any
 
 # this won't be shown in menu if it's not listed in the security rules
+
+
 class RegisClient(models.Model):
     _name = "regis.client"
     _description = "Client Registration Form"
@@ -39,11 +42,13 @@ class RegisClient(models.Model):
             vals['bio'] = "This is default bio"
 
         if vals.get('reference', _('New')) == _('New'):
-            vals['reference'] = self.env['ir.sequence'].next_by_code('regis.client') or _('New')
+            vals['reference'] = self.env['ir.sequence'].next_by_code(
+                'regis.client') or _('New')
 
         return super(RegisClient, self).create(vals)
 
-    fullname_seq = fields.Char(string='Sequencing Fullname', compute='_compute_fields_combination_seq')
+    fullname_seq = fields.Char(
+        string='Sequencing Fullname', compute='_compute_fields_combination_seq')
 
     @api.depends('first_name', 'last_name', 'reference')
     def _compute_fields_combination_seq(self):
@@ -55,7 +60,8 @@ class RegisClient(models.Model):
             else:
                 com.fullname_seq = f"{str(com.reference)} - "
 
-    fullname = fields.Char(string='Fullname', compute='_compute_fields_combination')
+    fullname = fields.Char(
+        string='Fullname', compute='_compute_fields_combination')
 
     @api.depends('first_name', 'last_name')
     def _compute_fields_combination(self):
@@ -91,7 +97,8 @@ class RegisClient(models.Model):
     def default_get(self, fields):
         res = super(RegisClient, self).default_get(fields)
         res['address'] = 'Jakarta, Indonesia'
-        res['bio'] = _('This is default bio, delete this line if you want to create other bio')
+        res['bio'] = _(
+            'This is default bio, delete this line if you want to create other bio')
         return res
 
     # override copy method
@@ -122,4 +129,5 @@ class RegisClient(models.Model):
                 raise ValidationError(_(f"Not a valid name"))
 
     # create archive/unarchive button
-    active = fields.Boolean(string='Active', default=True) # default is True, if default is False, so all of data will be archived
+    # default is True, if default is False, so all of data will be archived
+    active = fields.Boolean(string='Active', default=True)

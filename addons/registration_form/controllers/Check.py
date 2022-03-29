@@ -1,7 +1,5 @@
-import imp
-import json
 from odoo import http, _
-from .Utils import JsonValidResponse
+from .Utils import JsonErrorResponse, JsonValidResponse
 
 
 class Check(http.Controller):
@@ -11,7 +9,6 @@ class Check(http.Controller):
         auth="public", type="json", csrf=False
     )
     def CheckServer(self):
-
         """
         Check if server still alive
 
@@ -29,12 +26,13 @@ class Check(http.Controller):
             None
 
         usage:
-            - only required parameter: http://<host>:<port>/api/ping
+            - only required parameter: /api/ping
 
         return:
             - JsonValidResponse: dict
         """
 
-        return JsonValidResponse({
-            'message': _('okay, everything is working fine')
-        })
+        try:
+            return JsonValidResponse('Okay')
+        except Exception as e:
+            return JsonErrorResponse(e)
