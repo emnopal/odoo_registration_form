@@ -33,8 +33,7 @@ class Auth(http.Controller):
         """
         Authenticate User
 
-        Allowed Method:
-            - POST
+        allowed method: POST
 
         required parameter:
             - db: str
@@ -57,9 +56,9 @@ class Auth(http.Controller):
                 params['db'], params['username'], params['password'])
             return JsonValidResponse(request.env['ir.http'].session_info())
         except Exception as e:
-            if str(e) == 'Access Denied':
-                return JsonErrorResponse('Unauthorized, Access Denied. Check your db, username or password', 401)
-            return JsonErrorResponse(f'Missing required fields: {e}', 400)
+            if str(e) == _('Access Denied'):
+                return JsonErrorResponse(_('Unauthorized, Access Denied. Check your db, username or password'), 401)
+            return JsonErrorResponse(_(f'Missing required fields: {e}'), 400)
 
     @http.route(
         f'{ENDPOINT_AUTH}/logout',
@@ -69,9 +68,7 @@ class Auth(http.Controller):
         """
         Remove Session
 
-        Allowed Method:
-            - GET
-            - POST
+        Allowed Method: GET, POST
 
         required parameter:
             None
@@ -88,6 +85,6 @@ class Auth(http.Controller):
 
         try:
             request.session.logout(keep_db=True)
-            return JsonValidResponse({'message': _('Logout successful')})
+            return JsonValidResponse(_('Logout successful'))
         except Exception as e:
-            return JsonErrorResponse(e)
+            return JsonErrorResponse(_(e))

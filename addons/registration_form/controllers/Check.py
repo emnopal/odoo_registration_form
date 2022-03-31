@@ -12,12 +12,7 @@ class Check(http.Controller):
         """
         Check if server still alive
 
-        Allowed Method:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-            - PATCH
+        Allowed Method: GET, POST, PUT, DELETE, PATCH
 
         required parameter:
             None
@@ -33,6 +28,6 @@ class Check(http.Controller):
         """
 
         try:
-            return JsonValidResponse('Okay')
+            return JsonValidResponse(_('Okay'))
         except Exception as e:
-            return JsonErrorResponse(e)
+            return JsonErrorResponse(_(e))

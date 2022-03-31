@@ -1,3 +1,4 @@
+import json
 import logging
 from odoo import http, _, exceptions
 from odoo.http import request
@@ -35,44 +36,74 @@ class RegistrationFormRest(http.Controller):
         """
         Get All Data in Model
 
-        Allowed Method:
-            - GET
+        Allowed Method: GET
 
         required parameter:
-            - Model: str
+            - model: str
+                model name that available in odoo database
 
         optional parameter:
-            - Fields: str
-            - Ids: str|int
+            - fields: str
+                return only some fields
+
+            - ids: int
+                return only some ids
+
+            - order: str
+                order record by some fields (only available if ids is not set (if user query to all records))
+
+            - limit: int
+                limit the record (only available if ids is not set (if user query to all records))
+
+            - filter: list
+                filter the record (only available if ids is not set (if user query to all records))
+                for filter syntax, we are using odoo standard, please refer to these link for usage:
+                    - https://www.odoo.com/documentation/14.0/reference/sql.html
+                    - https://www.odoo.com/forum/help-1/how-to-customize-search-in-order-to-simultaneusly-look-for-multiple-fields-140159
+                    - https://learnopenerp.blogspot.com/2021/08/list-of-search-domain-operators-odoo.html
 
         usage:
             - only required parameter: /api/model/model.name
-            - with optional parameter: /api/model/model.name?fields=field1,field2&ids=1,2,3
+            - with optional parameter (with ids): /api/model/model.name?fields=field1,field2&ids=1,2,3
+            - with optional parameter (without ids): /api/model/model.name?fields=field1,field2&order=id%20asc&limit=10&filter&filter=[('field1','=','value1'),('field2','=','value2')]
 
         return:
-            - JsonValidResponse: dict
+            success:
+                - JsonValidResponse: dict
+            failed:
+                - JsonErrorResponse: dict
         """
 
         args = request.httprequest.args
 
         try:
-            record = request.env[model].sudo().search([])
+            if args.get('ids'):
+                ids = list(map(int, args.get('ids').split(',')))
+                record = request.env[model].sudo().browse(ids)
+            else:
+                if args.get('order'):
+                    order = args.get('order')
+                else:
+                    order = None
+                if args.get('limit'):
+                    limit = int(args.get('limit'))
+                else:
+                    limit = None
+                if args.get('filter'):
+                    filter = eval(args.get('filter'))
+                else:
+                    filter = []
+                record = request.env[model].sudo().search(filter, order=order, limit=limit)
+            records = record.read()
         except Exception as e:
-            return JsonErrorResponse(f"Invalid model {e}")
-
-        if args.get('ids'):
-            ids = list(map(int, args.get('ids').split(
-                ',') if args.get('ids') else []))
-            record = request.env[model].sudo().browse(ids)
-
-        records = record.read()
+            return JsonErrorResponse(_(f"Invalid: {e}"))
 
         if args.get('field') and args.get('field').strip() != '':
             fields = args.get('field').split(',')
             try:
                 records = record.read(fields)
             except Exception as e:
-                return JsonErrorResponse(e)
+                return JsonErrorResponse(_(e))
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -87,43 +118,74 @@ class RegistrationFormRest(http.Controller):
         """
         Get All Data in Model based on a field
 
-        Allowed Method:
-            - GET
+        allowed method: GET
 
         required parameter:
-            - Model: str
-            - Fields: str
+            - model: str
+                model name that available in odoo database
+            - fields: str
+                get a field from database model
 
         optional parameter:
-            - Ids: str|int
+            - fields: str
+                return only some fields
+
+            - ids: int
+                return only some ids
+
+            - order: str
+                order record by some fields (only available if ids is not set (if user query to all records))
+
+            - limit: int
+                limit the record (only available if ids is not set (if user query to all records))
+
+            - filter: list
+                filter the record (only available if ids is not set (if user query to all records))
+                for filter syntax, we are using odoo standard, please refer to these link for usage:
+                    - https://www.odoo.com/documentation/14.0/reference/sql.html
+                    - https://www.odoo.com/forum/help-1/how-to-customize-search-in-order-to-simultaneusly-look-for-multiple-fields-140159
+                    - https://learnopenerp.blogspot.com/2021/08/list-of-search-domain-operators-odoo.html
 
         usage:
-            - only required parameter: /api/model/model.name/field
-            - with optional parameter: /api/model/model.name/field?ids=1,2,3
+            - only required parameter: /api/model/model.name
+            - with optional parameter (with ids): /api/model/model.name?fields=field1,field2&ids=1,2,3
+            - with optional parameter (without ids): /api/model/model.name?fields=field1,field2&order=id%20asc&limit=10&filter&filter=[('field1','=','value1'),('field2','=','value2')]
 
         return:
-            - JsonValidResponse: dict
+            success:
+                - JsonValidResponse: dict
+            failed:
+                - JsonErrorResponse: dict
         """
 
         args = request.httprequest.args
 
         try:
-            record = request.env[model].sudo().search([])
-        except Exception as e:
-            return JsonErrorResponse(f"Invalid model {e}")
-
-        if args.get('ids'):
-            ids = list(map(int, args.get('ids').split(
-                ',') if args.get('ids') else []))
-            try:
+            if args.get('ids'):
+                ids = list(map(int, args.get('ids').split(',')))
                 record = request.env[model].sudo().browse(ids)
-            except Exception as e:
-                return JsonErrorResponse(f"Invalid model {e}")
+            else:
+                if args.get('order'):
+                    order = args.get('order')
+                else:
+                    order = None
+                if args.get('limit'):
+                    limit = int(args.get('limit'))
+                else:
+                    limit = None
+                if args.get('filter'):
+                    filter = eval(args.get('filter'))
+                else:
+                    filter = []
+                record = request.env[model].sudo().search(filter, order=order, limit=limit)
+            records = record.read()
+        except Exception as e:
+            return JsonErrorResponse(_(f"Invalid: {e}"))
 
         try:
             records = record.read([field])
         except Exception as e:
-            return JsonErrorResponse(e)
+            return JsonErrorResponse(_(e))
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -131,22 +193,23 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>/<int:ids>', ],
+        [f'{ENDPOINT}/<string:model>/<int:id>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
-    def GetADataInModel(self, model, ids):
+    def GetADataInModel(self, model, id):
         """
         Get A Data in Model
 
-        Allowed Method:
-            - GET
+        allowed method: GET
 
         required parameter:
-            - Model: str
-            - Ids: int
+            - model: str
+                model name that available in odoo database
+            - id: int
+                return only some ids
 
         optional parameter:
-            - Fields: str
+            - fields: str
 
         usage:
             - only required parameter: /api/model/model.name/1
@@ -159,9 +222,9 @@ class RegistrationFormRest(http.Controller):
         args = request.httprequest.args
 
         try:
-            record = request.env[model].sudo().browse(ids)
+            record = request.env[model].sudo().browse(id)
         except Exception as e:
-            return JsonErrorResponse(f"Invalid model {e}")
+            return JsonErrorResponse(_(f"Invalid: {e}"))
 
         records = record.read()
 
@@ -170,7 +233,7 @@ class RegistrationFormRest(http.Controller):
             try:
                 records = record.read(fields)
             except Exception as e:
-                return JsonErrorResponse(e)
+                return JsonErrorResponse(_(e))
 
         return JsonValidResponse({
             'length_record': len(records),
@@ -178,20 +241,19 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route(
-        [f'{ENDPOINT}/<string:model>/<int:ids>/<string:field>', ],
+        [f'{ENDPOINT}/<string:model>/<int:id>/<string:field>', ],
         auth="user", type="json", methods=['GET'], csrf=False
     )
-    def GetADataFromAFieldInModel(self, model, ids, field):
+    def GetADataFromAFieldInModel(self, model, id, field):
         """
         Get A Data in Model based on a field
 
-        Allowed Method:
-            - GET
+        allowed method: GET
 
         required parameter:
-            - Model: str
-            - Ids: int
-            - Fields: str
+            - model: str
+            - id: int
+            - fields: str
 
         optional parameter:
             None
@@ -206,14 +268,14 @@ class RegistrationFormRest(http.Controller):
         args = request.httprequest.args
 
         try:
-            record = request.env[model].sudo().browse([ids])
+            record = request.env[model].sudo().browse([id])
         except Exception as e:
-            return JsonErrorResponse(f"Invalid model {e}")
+            return JsonErrorResponse(_(f"Invalid: {e}"))
 
         try:
             records = record.read([field])
         except Exception as e:
-            return JsonErrorResponse(e)
+            return JsonErrorResponse(_(e))
 
         return JsonValidResponse({
             'length_record': len(records),

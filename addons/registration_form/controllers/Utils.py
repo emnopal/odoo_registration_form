@@ -1,5 +1,6 @@
 from odoo.http import Response
 import json
+from odoo import _
 
 
 class DatetimeEncoder(json.JSONEncoder):
@@ -23,7 +24,7 @@ def JsonValidResponse(data, valid_code=200):
     Response.status = str(valid_code)
     return {
         'status_code': valid_code,
-        'message': 'success',
+        'message': _('success'),
         'data': data
     }
 
@@ -34,7 +35,7 @@ def JsonErrorResponse(error, error_code=400):
     Response.status = str(error_code)
     return {
         'code': error_code,
-        'message': 'failed',
+        'message': _('failed'),
         'error': error
     }
 
