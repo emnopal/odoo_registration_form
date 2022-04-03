@@ -9,24 +9,6 @@ class Check(http.Controller):
         auth="public", type="json", csrf=False
     )
     def CheckServer(self):
-        """
-        Check if server still alive
-
-        Allowed Method: GET, POST, PUT, DELETE, PATCH
-
-        required parameter:
-            None
-
-        optional parameter:
-            None
-
-        usage:
-            - only required parameter: /api/ping
-
-        return:
-            - JsonValidResponse: dict
-        """
-
         try:
             return JsonValidResponse(_('Okay'))
         except Exception as e:

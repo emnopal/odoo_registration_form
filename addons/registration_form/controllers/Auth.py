@@ -30,25 +30,6 @@ class Auth(http.Controller):
         auth="none", type="json", methods=['POST'], csrf=False
     )
     def Login(self):
-        """
-        Authenticate User
-
-        allowed method: POST
-
-        required parameter:
-            - db: str
-            - login: str
-            - password: str
-
-        optional parameter:
-            None
-
-        usage:
-            - only required parameter: /api/auth/login
-
-        return:
-            - JsonValidResponse: dict
-        """
 
         params = request.jsonrequest
         try:
@@ -62,26 +43,9 @@ class Auth(http.Controller):
 
     @http.route(
         f'{ENDPOINT_AUTH}/logout',
-        auth="user", type="json", methods=['POST', 'GET'], csrf=False
+        auth="user", type="json", methods=['GET', 'POST'], csrf=False
     )
     def Logout(self):
-        """
-        Remove Session
-
-        Allowed Method: GET, POST
-
-        required parameter:
-            None
-
-        optional parameter:
-            None
-
-        usage:
-            - only required parameter: /api/auth/logout
-
-        return:
-            - JsonValidResponse: dict
-        """
 
         try:
             request.session.logout(keep_db=True)

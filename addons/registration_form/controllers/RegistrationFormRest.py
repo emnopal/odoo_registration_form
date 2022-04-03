@@ -29,22 +29,22 @@ class RegistrationFormRest(http.Controller):
     """
 
     @http.route([
-            f'{ENDPOINT}/<string:model>',
-            f'{ENDPOINT}/<string:model>/<string:field>',
-            f'{ENDPOINT}/<string:model>/<int:id>',
-            f'{ENDPOINT}/<string:model>/<int:id>/<string:field>',
-        ], auth="user", type="json", methods=['GET'], csrf=False)
-    def GetData(self, model, id=None, field=None):
+        f'{ENDPOINT}/<string:model>',
+        f'{ENDPOINT}/<string:model>/<string:field>',
+        f'{ENDPOINT}/<string:model>/<int:rec_id>',
+        f'{ENDPOINT}/<string:model>/<int:rec_id>/<string:field>',
+    ], auth="user", type="json", methods=['GET'], csrf=False)
+    def GetData(self, model, rec_id=None, field=None):
 
         args = request.httprequest.args
 
         try:
-            if id:
-                record = request.env[model].sudo().browse(id)
+            if rec_id:
+                record = request.env[model].sudo().browse(rec_id)
             else:
-                if args.get('ids'):
-                    ids = list(map(int, args.get('ids').split(',')))
-                    record = request.env[model].sudo().browse(ids)
+                if args.get('rec_ids'):
+                    rec_ids = list(map(int, args.get('rec_ids').split(',')))
+                    record = request.env[model].sudo().browse(rec_ids)
                 else:
                     if args.get('order'):
                         order = args.get('order')
@@ -88,9 +88,10 @@ class RegistrationFormRest(http.Controller):
         })
 
     @http.route([
-            f'{ENDPOINT}/<string:model>',
-        ], auth="user", type="json", methods=['POST'], csrf=False)
+        f'{ENDPOINT}/<string:model>',
+    ], auth="user", type="json", methods=['POST'], csrf=False)
     def PostData(self, model):
+
         params = request.jsonrequest
 
         try:
@@ -102,3 +103,94 @@ class RegistrationFormRest(http.Controller):
             'result': record.id,
         })
 
+    @http.route([
+        f'{ENDPOINT}/<string:model>',
+        f'{ENDPOINT}/<string:model>/<int:rec_id>',
+    ], auth="user", type="json", methods=['PUT'], csrf=False)
+    def PutData(self, model, rec_id=None):
+
+        params = request.jsonrequest
+        args = request.httprequest.args
+
+        try:
+            records = request.env[model].sudo()
+            if rec_id:  # return singleton record
+                record = records.browse(rec_id).ensure_one()
+                data = rec_id
+            else:
+                if args.get('rec_ids'):  # return multiple records
+                    rec_ids = list(map(int, args.get('rec_ids').split(',')))
+                    record = records.browse(rec_ids)
+                    data = rec_ids
+                else:
+                    # return multiple records (or maybe single record) by filter
+                    if args.get('filter'):
+                        filter = eval(args.get('filter'))
+                        record = records.search(filter)
+                        data = args.get('filter')
+                    else:  # if no filter, raise error
+                        raise exceptions.ValidationError(_('Invalid filter'))
+        except Exception as e:
+            return JsonErrorResponse(_({
+                'result': False,
+                'message': _(f"Invalid update {data}: {e}"),
+            }))
+
+        try:
+            result = record.write(params)
+        except Exception as e:
+            return JsonErrorResponse(_({
+                'result': False,
+                'message': _(f"Invalid update {data}: {e}"),
+            }))
+
+        return JsonValidResponse({
+            'result': True,
+            'message': _(f"Successfully update {data}"),
+        })
+
+    @http.route([
+        f'{ENDPOINT}/<string:model>',
+        f'{ENDPOINT}/<string:model>/<int:rec_id>',
+    ], auth="user", type="json", methods=['DELETE'], csrf=False)
+    def DeleteData(self, model, rec_id=None):
+
+        params = request.jsonrequest
+        args = request.httprequest.args
+
+        try:
+            records = request.env[model].sudo()
+            if rec_id:  # return singleton record
+                record = records.browse(rec_id).ensure_one()
+                data = rec_id
+            else:
+                if args.get('rec_ids'):  # return multiple records
+                    rec_ids = list(map(int, args.get('rec_ids').split(',')))
+                    record = records.browse(rec_ids)
+                    data = rec_ids
+                else:
+                    # return multiple records (or maybe single record) by filter
+                    if args.get('filter'):
+                        filter = eval(args.get('filter'))
+                        record = records.search(filter)
+                        data = args.get('filter')
+                    else:  # if no filter, raise error
+                        raise exceptions.ValidationError(_('Invalid filter'))
+        except Exception as e:
+            return JsonErrorResponse(_({
+                'result': False,
+                'message': _(f"Invalid delete {data}: {e}"),
+            }))
+
+        try:
+            result = record.unlink()
+        except Exception as e:
+            return JsonErrorResponse(_({
+                'result': False,
+                'message': _(f"Invalid delete {data}: {e}"),
+            }))
+
+        return JsonValidResponse({
+            'result': True,
+            'message': _(f"Successfully delete {data}"),
+        })
