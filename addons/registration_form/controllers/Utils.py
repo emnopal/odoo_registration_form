@@ -25,7 +25,8 @@ def JsonValidResponse(data, valid_code=200):
     return {
         'status_code': valid_code,
         'message': _('success'),
-        'data': data
+        'data': data,
+        'success': True
     }
 
 def JsonErrorResponse(error, error_code=400):
@@ -36,6 +37,7 @@ def JsonErrorResponse(error, error_code=400):
     return {
         'code': error_code,
         'message': _('failed'),
-        'error': error
+        'error': error,
+        'success': False
     }
 

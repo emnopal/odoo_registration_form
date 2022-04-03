@@ -129,20 +129,21 @@ class RegistrationFormRest(http.Controller):
                         record = records.search(filter)
                         data = args.get('filter')
                     else:  # if no filter, raise error
+                        data = None
                         raise exceptions.ValidationError(_('Invalid filter'))
         except Exception as e:
-            return JsonErrorResponse(_({
+            return JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid update {data}: {e}"),
-            }))
+            })
 
         try:
             result = record.write(params)
         except Exception as e:
-            return JsonErrorResponse(_({
+            return JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid update {data}: {e}"),
-            }))
+            })
 
         return JsonValidResponse({
             'result': True,
@@ -175,20 +176,21 @@ class RegistrationFormRest(http.Controller):
                         record = records.search(filter)
                         data = args.get('filter')
                     else:  # if no filter, raise error
+                        data = None
                         raise exceptions.ValidationError(_('Invalid filter'))
         except Exception as e:
-            return JsonErrorResponse(_({
+            return JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid delete {data}: {e}"),
-            }))
+            })
 
         try:
             result = record.unlink()
         except Exception as e:
-            return JsonErrorResponse(_({
+            return JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid delete {data}: {e}"),
-            }))
+            })
 
         return JsonValidResponse({
             'result': True,
