@@ -1,14 +1,12 @@
-import json
-import logging
+import math
 from odoo import http, _, exceptions
 from odoo.http import request
-from .Utils import JsonErrorResponse, JsonValidResponse
+from .RestHelper import RestHelper
 
 ENDPOINT = '/api/model'
-_logging = logging.getLogger(__name__)
 
 
-class RegistrationFormRest(http.Controller):
+class RestController(http.Controller):
 
     """
     just for example
@@ -38,6 +36,7 @@ class RegistrationFormRest(http.Controller):
 
         args = request.httprequest.args
 
+        # Querying all data
         try:
             if rec_id:
                 record = request.env[model].sudo().browse(rec_id)
@@ -68,8 +67,9 @@ class RegistrationFormRest(http.Controller):
                     record = request.env[model].sudo().search(
                         filter, order=order, limit=limit, offset=offset)
         except Exception as e:
-            return JsonErrorResponse(_(f"Invalid: {e}"))
+            return RestHelper.JsonErrorResponse(_(f"Invalid: {e}"))
 
+        # Querying all data but based from a field or the fields
         try:
             if field:
                 records = record.read([field])
@@ -80,9 +80,38 @@ class RegistrationFormRest(http.Controller):
                 else:
                     records = record.read()
         except Exception as e:
-            return JsonErrorResponse(_(e))
+            return RestHelper.JsonErrorResponse(_(e))
 
-        return JsonValidResponse({
+        # from: https://github.com/yezyilomo/odoo-rest-api/blob/master/controllers/controllers.py
+        prev_page = None
+        next_page = None
+        total_page_number = 1
+        current_page = 1
+
+        if args.get('page_size'):
+            page_size = int(args.get('page_size'))
+            count = len(records)
+            total_page_number = math.ceil(count/page_size)
+
+            if args.get('page'):
+                current_page = int(args.get('page'))
+            else:
+                current_page = 1  # Default page Number
+            start = page_size*(current_page-1)
+            stop = current_page*page_size
+            records = records[start:stop]
+            next_page = current_page+1 \
+                if 0 < current_page + 1 <= total_page_number \
+                else None
+            prev_page = current_page-1 \
+                if 0 < current_page - 1 <= total_page_number \
+                else None
+
+        return RestHelper.JsonValidResponse({
+            "prev": prev_page,
+            "current": current_page,
+            "next": next_page,
+            "total_pages": total_page_number,
             'length_record': len(records),
             'record': records,
         })
@@ -97,9 +126,9 @@ class RegistrationFormRest(http.Controller):
         try:
             record = request.env[model].sudo().create(params)
         except Exception as e:
-            return JsonErrorResponse(_(e))
+            return RestHelper.JsonErrorResponse(_(e))
 
-        return JsonValidResponse({
+        return RestHelper.JsonValidResponse({
             'result': record.id,
         })
 
@@ -132,7 +161,7 @@ class RegistrationFormRest(http.Controller):
                         data = None
                         raise exceptions.ValidationError(_('Invalid filter'))
         except Exception as e:
-            return JsonErrorResponse({
+            return RestHelper.JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid update {data}: {e}"),
             })
@@ -140,12 +169,12 @@ class RegistrationFormRest(http.Controller):
         try:
             result = record.write(params)
         except Exception as e:
-            return JsonErrorResponse({
+            return RestHelper.JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid update {data}: {e}"),
             })
 
-        return JsonValidResponse({
+        return RestHelper.JsonValidResponse({
             'result': True,
             'message': _(f"Successfully update {data}"),
         })
@@ -179,7 +208,7 @@ class RegistrationFormRest(http.Controller):
                         data = None
                         raise exceptions.ValidationError(_('Invalid filter'))
         except Exception as e:
-            return JsonErrorResponse({
+            return RestHelper.JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid delete {data}: {e}"),
             })
@@ -187,12 +216,12 @@ class RegistrationFormRest(http.Controller):
         try:
             result = record.unlink()
         except Exception as e:
-            return JsonErrorResponse({
+            return RestHelper.JsonErrorResponse({
                 'result': False,
                 'message': _(f"Invalid delete {data}: {e}"),
             })
 
-        return JsonValidResponse({
+        return RestHelper.JsonValidResponse({
             'result': True,
             'message': _(f"Successfully delete {data}"),
         })

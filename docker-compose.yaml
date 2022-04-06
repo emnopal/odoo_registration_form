@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   postgres:
+    container_name: postgres
     image: postgres:13 # Latest postgres not support odoo 14
     restart: always
     environment:
@@ -15,6 +16,7 @@ services:
       - 5432:5432/tcp
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4:latest
     restart: always
     volumes:
@@ -30,6 +32,7 @@ services:
       - postgres
 
   odoo:
+    container_name: odoo
     build: .
     restart: always
     depends_on:
@@ -44,6 +47,7 @@ services:
       - 8069:8069/tcp
 
   nginx:
+    container_name: nginx
     image: nginx:latest
     volumes:
       - ./config/nginx:/etc/nginx/conf.d
@@ -58,6 +62,7 @@ services:
       - pgadmin:pgadmin
 
   # ngrok:
+  #   container_name: ngrok
   #   image: wernight/ngrok:latest
   #   ports:
   #     - 4040:4040

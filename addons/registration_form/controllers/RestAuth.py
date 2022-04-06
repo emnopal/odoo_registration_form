@@ -1,11 +1,11 @@
-from odoo import http, _, exceptions
-from odoo.http import request, Response
-from .Utils import JsonErrorResponse, JsonValidResponse
+from odoo import http, _
+from odoo.http import request
+from .RestHelper import RestHelper
 
 ENDPOINT_AUTH = '/api/auth'
 
 
-class Auth(http.Controller):
+class RestAuth(http.Controller):
 
     """
     just for example
@@ -35,11 +35,11 @@ class Auth(http.Controller):
         try:
             request.session.authenticate(
                 params['db'], params['username'], params['password'])
-            return JsonValidResponse(request.env['ir.http'].session_info())
+            return RestHelper.JsonValidResponse(request.env['ir.http'].session_info())
         except Exception as e:
             if str(e) == _('Access Denied'):
-                return JsonErrorResponse(_('Unauthorized, Access Denied. Check your db, username or password'), 401)
-            return JsonErrorResponse(_(f'Missing required fields: {e}'), 400)
+                return RestHelper.JsonErrorResponse(_('Unauthorized, Access Denied. Check your db, username or password'), 401)
+            return RestHelper.JsonErrorResponse(_(f'Missing required fields: {e}'), 400)
 
     @http.route(
         f'{ENDPOINT_AUTH}/logout',
@@ -49,6 +49,6 @@ class Auth(http.Controller):
 
         try:
             request.session.logout(keep_db=True)
-            return JsonValidResponse(_('Logout successful'))
+            return RestHelper.JsonValidResponse(_('Logout successful'))
         except Exception as e:
-            return JsonErrorResponse(_(e))
+            return RestHelper.JsonErrorResponse(_(e))
