@@ -1,6 +1,6 @@
 __pycache__
 *.pyc
-.env
+*.env
 notes.txt
 addons/*
 !addons/registration_form
@@ -10,3 +10,4 @@ addons/*
 !addons/README.md
 __pycache__
 *.pyc
+config/odoo/odoo.conf
